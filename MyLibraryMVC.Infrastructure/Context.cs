@@ -9,20 +9,17 @@ using MyLibraryMVC.Domain.Model;
 
 namespace MyLibraryMVC.Infrastructure
 {
-	public class Context : IdentityDbContext
+	public class Context(DbContextOptions options) : IdentityDbContext(options)
 	{
 		public DbSet<AgeGroup> AgeGroups { get; set; }
 		public DbSet<Author> Authors { get; set; }
 		public DbSet<Book> Books { get; set; }
+		public DbSet<BookInfo> BookInfo { get; set; }
 		public DbSet<Category> Categories { get; set; }
 		public DbSet<City> Cities { get; set; }
 		public DbSet<House> PublishingHouses { get; set; }
-		public DbSet<Info> PublishingInfos { get; set; }
+		public DbSet<Info> PublishingInfo { get; set; }
 		public DbSet<Loan> Loans { get; set; }
-
-		public Context(DbContextOptions options) : base(options) 
-		{ 
-		}
 
 		protected override void OnModelCreating(ModelBuilder builder)
 		{

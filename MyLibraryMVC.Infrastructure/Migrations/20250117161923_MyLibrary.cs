@@ -212,7 +212,40 @@ namespace MyLibraryMVC.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PublishingInfos",
+                name: "BookInfo",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    NumberOfPages = table.Column<int>(type: "int", nullable: false),
+                    NumberOfChapter = table.Column<int>(type: "int", nullable: false),
+                    Illustration = table.Column<bool>(type: "bit", nullable: false),
+                    Binding = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Subtitle = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CategoryId = table.Column<int>(type: "int", nullable: false),
+                    AgeGroupId = table.Column<int>(type: "int", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsLoan = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BookInfo", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BookInfo_AgeGroups_AgeGroupId",
+                        column: x => x.AgeGroupId,
+                        principalTable: "AgeGroups",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BookInfo_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PublishingInfo",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -225,15 +258,15 @@ namespace MyLibraryMVC.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PublishingInfos", x => x.Id);
+                    table.PrimaryKey("PK_PublishingInfo", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PublishingInfos_Cities_CityOfPublishingId",
+                        name: "FK_PublishingInfo_Cities_CityOfPublishingId",
                         column: x => x.CityOfPublishingId,
                         principalTable: "Cities",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_PublishingInfos_PublishingHouses_PublishingHouseId",
+                        name: "FK_PublishingInfo_PublishingHouses_PublishingHouseId",
                         column: x => x.PublishingHouseId,
                         principalTable: "PublishingHouses",
                         principalColumn: "Id",
@@ -247,32 +280,21 @@ namespace MyLibraryMVC.Infrastructure.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Subtitle = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CategoryId = table.Column<int>(type: "int", nullable: false),
-                    AgeGroupId = table.Column<int>(type: "int", nullable: false),
                     PublishingInfoId = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IsBorrowed = table.Column<bool>(type: "bit", nullable: false)
+                    BookInfoId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Books", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Books_AgeGroups_AgeGroupId",
-                        column: x => x.AgeGroupId,
-                        principalTable: "AgeGroups",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        name: "FK_Books_BookInfo_BookInfoId",
+                        column: x => x.BookInfoId,
+                        principalTable: "BookInfo",
+                        principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Books_Categories_CategoryId",
-                        column: x => x.CategoryId,
-                        principalTable: "Categories",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Books_PublishingInfos_PublishingInfoId",
+                        name: "FK_Books_PublishingInfo_PublishingInfoId",
                         column: x => x.PublishingInfoId,
-                        principalTable: "PublishingInfos",
+                        principalTable: "PublishingInfo",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -284,7 +306,7 @@ namespace MyLibraryMVC.Infrastructure.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SurName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SurName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     RealName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     RealSurName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DateOfBirth = table.Column<DateOnly>(type: "date", nullable: false),
@@ -309,18 +331,12 @@ namespace MyLibraryMVC.Infrastructure.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     BookId = table.Column<int>(type: "int", nullable: false),
                     UserID = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    LoanTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ReturnDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    LoanDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ReturnDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Loans", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Loans_AspNetUsers_ApplicationUserId",
-                        column: x => x.ApplicationUserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Loans_AspNetUsers_UserID",
                         column: x => x.UserID,
@@ -380,24 +396,24 @@ namespace MyLibraryMVC.Infrastructure.Migrations
                 column: "BookId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Books_AgeGroupId",
-                table: "Books",
+                name: "IX_BookInfo_AgeGroupId",
+                table: "BookInfo",
                 column: "AgeGroupId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Books_CategoryId",
-                table: "Books",
+                name: "IX_BookInfo_CategoryId",
+                table: "BookInfo",
                 column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Books_BookInfoId",
+                table: "Books",
+                column: "BookInfoId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Books_PublishingInfoId",
                 table: "Books",
                 column: "PublishingInfoId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Loans_ApplicationUserId",
-                table: "Loans",
-                column: "ApplicationUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Loans_BookId",
@@ -410,13 +426,13 @@ namespace MyLibraryMVC.Infrastructure.Migrations
                 column: "UserID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PublishingInfos_CityOfPublishingId",
-                table: "PublishingInfos",
+                name: "IX_PublishingInfo_CityOfPublishingId",
+                table: "PublishingInfo",
                 column: "CityOfPublishingId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PublishingInfos_PublishingHouseId",
-                table: "PublishingInfos",
+                name: "IX_PublishingInfo_PublishingHouseId",
+                table: "PublishingInfo",
                 column: "PublishingHouseId");
         }
 
@@ -454,13 +470,16 @@ namespace MyLibraryMVC.Infrastructure.Migrations
                 name: "Books");
 
             migrationBuilder.DropTable(
+                name: "BookInfo");
+
+            migrationBuilder.DropTable(
+                name: "PublishingInfo");
+
+            migrationBuilder.DropTable(
                 name: "AgeGroups");
 
             migrationBuilder.DropTable(
                 name: "Categories");
-
-            migrationBuilder.DropTable(
-                name: "PublishingInfos");
 
             migrationBuilder.DropTable(
                 name: "Cities");

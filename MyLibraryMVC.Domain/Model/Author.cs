@@ -9,12 +9,12 @@ namespace MyLibraryMVC.Domain.Model
 	public class Author
 	{
 		public int Id { get; set; }
-		public string Name { get; set; }
-		public string SurName { get; set; }
+		public required string Name { get; set; }
+		public string? SurName { get; set; }
 		public string? RealName { get; set; }
 		public string? RealSurName { get; set; } 
 		public DateOnly DateOfBirth { get; set; }
 		public int BookId { get; set; }
-		public virtual Book Book { get; set; }
+		public required virtual Book Book { get; set; }
 	}
 }

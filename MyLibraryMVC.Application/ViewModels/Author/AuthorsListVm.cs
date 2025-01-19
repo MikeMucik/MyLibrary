@@ -4,11 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyLibraryMVC.Domain.Model
+namespace MyLibraryMVC.Application.ViewModels.Author
 {
-	public class City
+	public class AuthorsListVm
 	{
-		public int Id { get; set; }
-		public required string Name { get; set; }
 	}
 }

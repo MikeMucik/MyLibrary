@@ -1,0 +1,94 @@
+﻿@model MyLibraryMVC.Application.ViewModels.Book.BookDetailsVm
+@{
+    ViewData["Title"] = "Details";  
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>BookInfo</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Title)
+        </dd><dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Authors)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Authors)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Subtitle)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Subtitle)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Category)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Category)
+        </dd><dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.AgeGroup)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.AgeGroup)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.NumberOfPages)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.NumberOfPages)
+        </dd>        
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.NumberOfChapter)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.NumberOfChapter)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Illustration)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Illustration)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Binding)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Binding)
+        </dd>
+       
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.YearOfPublication)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.YearOfPublication)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.NumberOfPublishing)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.NumberOfPublishing)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.PublishingDate)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.PublishingDate)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
