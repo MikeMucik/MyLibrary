@@ -7,22 +7,23 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="ViewModels\AgeGroup\" />
-    <Folder Include="ViewModels\Castegory\" />
     <Folder Include="ViewModels\City\" />
     <Folder Include="ViewModels\House\" />
     <Folder Include="ViewModels\Info\" />
     <Folder Include="ViewModels\Loan\" />
     <Folder Include="ViewModels\ListUsersLoan\" />
+    <Folder Include="ViewModels\BookAuthor\" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="13.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="2.3.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\MyLibraryMVC.Domain\MyLibraryMVC.Domain.csproj" />
+    <ProjectReference Include="..\MyLibraryMVC.Infrastructure\MyLibraryMVC.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

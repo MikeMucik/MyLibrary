@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MyLibraryMVC.Application.Interfaces;
+using MyLibraryMVC.Application.ViewModels.Author;
 using MyLibraryMVC.Application.ViewModels.Book;
 using MyLibraryMVC.Domain.Interfaces;
+using MyLibraryMVC.Domain.Model;
 
 namespace MyLibraryMVC.Application.Services
 {
@@ -15,11 +17,28 @@ namespace MyLibraryMVC.Application.Services
 	{
 		private readonly IBookRepo _bookRepo;
 		private readonly IMapper _mapper;
-		public BookService(IBookRepo bookRepo, IMapper mapper)
+		//private readonly IBookAuthorRepo _bookAuthorRepo;
+		//private readonly IAuthorRepo _authorRepo;
+		public BookService(IBookRepo bookRepo,
+			IMapper mapper
+			//,
+			//IBookAuthorRepo bookAuthorRepo,
+			//IAuthorRepo authorRepo
+			)
 		{
 			_bookRepo = bookRepo;
 			_mapper = mapper;
+			//_bookAuthorRepo = bookAuthorRepo;
+			//_authorRepo = authorRepo;
 		}
+
+		public int AddBook(NewBookVm model)
+		{
+			var newBook = _mapper.Map<Book>(model);			
+			var toAddedBook = _bookRepo.AddBook(newBook);			
+			return toAddedBook;
+		}
+
 		public ListBooksVm GetAllBooks(int pageSize, int pageNumber, string searchString)
 		{
 			var books = _bookRepo.GetAllBooks()

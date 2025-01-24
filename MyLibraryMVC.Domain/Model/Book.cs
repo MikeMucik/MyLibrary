@@ -10,12 +10,12 @@ namespace MyLibraryMVC.Domain.Model
 	{
 		public int Id { get; set; }
 		public required string Title { get; set; }
-		public required virtual ICollection<Author> Authors { get; set; }				
-		public int PublishingInfoId { get; set; }
+		public required virtual ICollection<BookAuthor> BookAuthors { get; set; }	= [];			
+		public int? PublishingInfoId { get; set; }
 		public virtual Info? PublishingInfo { get; set; }		
 		public ICollection<Loan>? Loan { get; set; }
-		public int? BookInfoId { get; set; }
-		public virtual BookInfo? BookInfo { get; set; }
+		public int BookInfoId { get; set; }
+		public required virtual BookInfo BookInfo { get; set; }
 
 	}
 }

@@ -258,10 +258,7 @@ namespace MyLibraryMVC.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("BookId")
-                        .HasColumnType("int");
-
-                    b.Property<DateOnly>("DateOfBirth")
+                    b.Property<DateOnly?>("DateOfBirth")
                         .HasColumnType("date");
 
                     b.Property<string>("Name")
@@ -279,8 +276,6 @@ namespace MyLibraryMVC.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BookId");
-
                     b.ToTable("Authors");
                 });
 
@@ -292,10 +287,10 @@ namespace MyLibraryMVC.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("BookInfoId")
+                    b.Property<int>("BookInfoId")
                         .HasColumnType("int");
 
-                    b.Property<int>("PublishingInfoId")
+                    b.Property<int?>("PublishingInfoId")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
@@ -311,6 +306,21 @@ namespace MyLibraryMVC.Infrastructure.Migrations
                     b.ToTable("Books");
                 });
 
+            modelBuilder.Entity("MyLibraryMVC.Domain.Model.BookAuthor", b =>
+                {
+                    b.Property<int>("BookId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AuthorId")
+                        .HasColumnType("int");
+
+                    b.HasKey("BookId", "AuthorId");
+
+                    b.HasIndex("AuthorId");
+
+                    b.ToTable("BooksAuthor");
+                });
+
             modelBuilder.Entity("MyLibraryMVC.Domain.Model.BookInfo", b =>
                 {
                     b.Property<int>("Id")
@@ -319,7 +329,7 @@ namespace MyLibraryMVC.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("AgeGroupId")
+                    b.Property<int?>("AgeGroupId")
                         .HasColumnType("int");
 
                     b.Property<string>("Binding")
@@ -331,16 +341,16 @@ namespace MyLibraryMVC.Infrastructure.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("Illustration")
+                    b.Property<bool?>("Illustration")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsLoan")
+                    b.Property<bool?>("IsLoan")
                         .HasColumnType("bit");
 
-                    b.Property<int>("NumberOfChapter")
+                    b.Property<int?>("NumberOfChapter")
                         .HasColumnType("int");
 
-                    b.Property<int>("NumberOfPages")
+                    b.Property<int?>("NumberOfPages")
                         .HasColumnType("int");
 
                     b.Property<string>("Subtitle")
@@ -414,19 +424,19 @@ namespace MyLibraryMVC.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CityOfPublishingId")
+                    b.Property<int?>("CityOfPublishingId")
                         .HasColumnType("int");
 
-                    b.Property<int>("NumberOfPublishing")
+                    b.Property<int?>("NumberOfPublishing")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("PublishingDate")
+                    b.Property<DateTime?>("PublishingDate")
                         .HasColumnType("date");
 
-                    b.Property<int>("PublishingHouseId")
+                    b.Property<int?>("PublishingHouseId")
                         .HasColumnType("int");
 
-                    b.Property<int>("YearOfPublication")
+                    b.Property<int?>("YearOfPublication")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -534,41 +544,47 @@ namespace MyLibraryMVC.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("MyLibraryMVC.Domain.Model.Author", b =>
-                {
-                    b.HasOne("MyLibraryMVC.Domain.Model.Book", "Book")
-                        .WithMany("Authors")
-                        .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Book");
-                });
-
             modelBuilder.Entity("MyLibraryMVC.Domain.Model.Book", b =>
                 {
                     b.HasOne("MyLibraryMVC.Domain.Model.BookInfo", "BookInfo")
                         .WithMany()
-                        .HasForeignKey("BookInfoId");
+                        .HasForeignKey("BookInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("MyLibraryMVC.Domain.Model.Info", "PublishingInfo")
                         .WithMany()
-                        .HasForeignKey("PublishingInfoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PublishingInfoId");
 
                     b.Navigation("BookInfo");
 
                     b.Navigation("PublishingInfo");
                 });
 
+            modelBuilder.Entity("MyLibraryMVC.Domain.Model.BookAuthor", b =>
+                {
+                    b.HasOne("MyLibraryMVC.Domain.Model.Author", "Author")
+                        .WithMany("BookAuthors")
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MyLibraryMVC.Domain.Model.Book", "Book")
+                        .WithMany("BookAuthors")
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Author");
+
+                    b.Navigation("Book");
+                });
+
             modelBuilder.Entity("MyLibraryMVC.Domain.Model.BookInfo", b =>
                 {
                     b.HasOne("MyLibraryMVC.Domain.Model.AgeGroup", "AgeGroup")
                         .WithMany()
-                        .HasForeignKey("AgeGroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AgeGroupId");
 
                     b.HasOne("MyLibraryMVC.Domain.Model.Category", "Category")
                         .WithMany()
@@ -585,15 +601,11 @@ namespace MyLibraryMVC.Infrastructure.Migrations
                 {
                     b.HasOne("MyLibraryMVC.Domain.Model.City", "CityOfPublishing")
                         .WithMany()
-                        .HasForeignKey("CityOfPublishingId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CityOfPublishingId");
 
                     b.HasOne("MyLibraryMVC.Domain.Model.House", "PublishingHouse")
                         .WithMany()
-                        .HasForeignKey("PublishingHouseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PublishingHouseId");
 
                     b.Navigation("CityOfPublishing");
 
@@ -617,9 +629,14 @@ namespace MyLibraryMVC.Infrastructure.Migrations
                     b.Navigation("Book");
                 });
 
+            modelBuilder.Entity("MyLibraryMVC.Domain.Model.Author", b =>
+                {
+                    b.Navigation("BookAuthors");
+                });
+
             modelBuilder.Entity("MyLibraryMVC.Domain.Model.Book", b =>
                 {
-                    b.Navigation("Authors");
+                    b.Navigation("BookAuthors");
 
                     b.Navigation("Loan");
                 });

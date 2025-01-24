@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MyLibraryMVC.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class MyLibrary : Migration
+    public partial class MyLibraryHome : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -217,15 +217,15 @@ namespace MyLibraryMVC.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    NumberOfPages = table.Column<int>(type: "int", nullable: false),
-                    NumberOfChapter = table.Column<int>(type: "int", nullable: false),
-                    Illustration = table.Column<bool>(type: "bit", nullable: false),
+                    NumberOfPages = table.Column<int>(type: "int", nullable: true),
+                    NumberOfChapter = table.Column<int>(type: "int", nullable: true),
+                    Illustration = table.Column<bool>(type: "bit", nullable: true),
                     Binding = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Subtitle = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CategoryId = table.Column<int>(type: "int", nullable: false),
-                    AgeGroupId = table.Column<int>(type: "int", nullable: false),
+                    AgeGroupId = table.Column<int>(type: "int", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsLoan = table.Column<bool>(type: "bit", nullable: false)
+                    IsLoan = table.Column<bool>(type: "bit", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -234,8 +234,7 @@ namespace MyLibraryMVC.Infrastructure.Migrations
                         name: "FK_BookInfo_AgeGroups_AgeGroupId",
                         column: x => x.AgeGroupId,
                         principalTable: "AgeGroups",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_BookInfo_Categories_CategoryId",
                         column: x => x.CategoryId,

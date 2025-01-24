@@ -16,6 +16,8 @@ namespace MyLibraryMVC.Infrastructure
 			services.AddTransient<IAgeGropuRepo, AgeGroupRepo>();
 			services.AddTransient<IAuthorRepo, AuthorRepo>();
 			services.AddTransient<IBookRepo, BookRepo>();
+			services.AddTransient<IBookAuthorRepo, BookAuthorRepo>();
+			services.AddTransient<IBookInfoRepo, BookInfoRepo>();
 			services.AddTransient<ICategoryRepo, CategoryRepo>();
 			services.AddTransient<ICityRepo, CityRepo>();
 			services.AddTransient<IHouseRepo, HouseRepo>();

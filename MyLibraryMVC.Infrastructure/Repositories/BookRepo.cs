@@ -16,15 +16,24 @@ namespace MyLibraryMVC.Infrastructure.Repositories
 		{
 			_context = context;
 		}
+
+		public int AddBook(Book newBook)
+		{
+			_context.Books.Add(newBook);
+			_context.SaveChanges();
+			return newBook.Id;
+		}
+
 		public IQueryable<Book> GetAllBooks()
 		{
-			return _context.Books;
+			return _context.Books;			 
 		}
 
 		public Book GetBookDetails(int id)
 		{
 			var book = _context.Books
-				.Include(b => b.Authors)				
+				.Include(b => b.BookAuthors)	
+					.ThenInclude(i=>i.Author)
 				.Include(b => b.BookInfo)
 					.ThenInclude(i => i.AgeGroup)
 				.Include(b => b.BookInfo)

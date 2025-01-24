@@ -9,6 +9,7 @@ namespace MyLibraryMVC.Domain.Interfaces
 {
 	public interface IBookRepo
 	{
+		int AddBook(Book newBook);
 		IQueryable<Book> GetAllBooks();
 		Book GetBookDetails(int id);
 	}

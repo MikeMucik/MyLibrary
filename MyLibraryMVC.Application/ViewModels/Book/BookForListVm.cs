@@ -17,12 +17,12 @@ namespace MyLibraryMVC.Application.ViewModels.Book
 		public required List<AuthorVm> Authors { get; set; }
 		public required string Category { get; set; }
 		public string? AgeGroup { get; set; }
-		public required bool IsLoan { get; set;}
+		public required bool IsLoan { get; set;}//
 		public void Mapping(Profile profile)
 		{
 			profile.CreateMap<Domain.Model.Book, BookForListVm>()
 				.ForMember(b=>b.Title, opt => opt.MapFrom(a=>a.Title))
-				.ForMember(b=>b.Authors, opt => opt.MapFrom(a=>a.Authors))
+				.ForMember(b=>b.Authors, opt => opt.MapFrom(a=>a.BookAuthors))
 				.ForMember(b=>b.Category, opt=>opt.MapFrom(a=>a.BookInfo.Category.Name))
 				.ForMember(b=>b.AgeGroup, opt=>opt.MapFrom(a=>a.BookInfo.AgeGroup.Name))
 				.ForMember(b=>b.IsLoan, opt=>opt.MapFrom(a=>a.BookInfo.IsLoan));

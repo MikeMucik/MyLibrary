@@ -14,6 +14,7 @@ namespace MyLibraryMVC.Infrastructure
 		public DbSet<AgeGroup> AgeGroups { get; set; }
 		public DbSet<Author> Authors { get; set; }
 		public DbSet<Book> Books { get; set; }
+		public DbSet<BookAuthor> BooksAuthor { get; set; }
 		public DbSet<BookInfo> BookInfo { get; set; }
 		public DbSet<Category> Categories { get; set; }
 		public DbSet<City> Cities { get; set; }
@@ -25,10 +26,18 @@ namespace MyLibraryMVC.Infrastructure
 		{
 			base.OnModelCreating(builder);
 
-			builder.Entity<Author>()
+			builder.Entity<BookAuthor>()
+				.HasKey(it => new { it.BookId, it.AuthorId });
+
+			builder.Entity<BookAuthor>()
 				.HasOne<Book>(b => b.Book)
-				.WithMany(a => a.Authors)
+				.WithMany(a => a.BookAuthors)
 				.HasForeignKey(b => b.BookId);
+
+			builder.Entity<BookAuthor>()
+				.HasOne<Author>(b => b.Author)
+				.WithMany(a => a.BookAuthors)
+				.HasForeignKey(b => b.AuthorId);
 
 			builder.Entity<Author>()
 				.Property(a=>a.DateOfBirth)

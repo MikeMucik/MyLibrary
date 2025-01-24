@@ -9,6 +9,8 @@ namespace MyLibraryMVC.Application.Interfaces
 {
 	public interface IBookService
 	{
+		int AddBook(NewBookVm model);
+		
 		ListBooksVm GetAllBooks(int pageSize, int pageNumber, string searchString);
 		BookDetailsVm GetBookDetails(int id);
 	}

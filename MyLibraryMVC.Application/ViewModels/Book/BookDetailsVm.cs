@@ -13,7 +13,7 @@ namespace MyLibraryMVC.Application.ViewModels.Book
 	{
 		public int Id { get; set; }
 		public required string Title { get; set; }
-		public required List<AuthorVm> Authors { get; set; }
+		public required List<AuthorVm> Authors { get; set; } = new List<AuthorVm>();
 		public required string Category { get; set; }
 		public string? AgeGroup { get; set; }
 		public int NumberOfPages { get; set; }
@@ -22,7 +22,7 @@ namespace MyLibraryMVC.Application.ViewModels.Book
 		public string? Binding { get; set; }
 		public int YearOfPublication { get; set; }
 		public string? PublishingHouse { get; set; }
-		public int NumberOfPublishing { get; set; }
+		public int? NumberOfPublishing { get; set; }
 		public DateTime PublishingDate { get; set; }
 		public string? CityOfPublishing { get; set; }
 		public string? Description { get; set; }
@@ -30,8 +30,7 @@ namespace MyLibraryMVC.Application.ViewModels.Book
 		public void Mapping(Profile profile)
 		{
 			profile.CreateMap<Domain.Model.Book, BookDetailsVm>()
-				//.ForMember(b => b.Title, opt => opt.MapFrom(a => a.Title))
-				//.ForMember(b => b.Authors, opt => opt.MapFrom(a => a.Authors))
+				.ForMember(b => b.Authors, opt => opt.MapFrom(a => a.BookAuthors))
 				.ForMember(b => b.Category, opt => opt.MapFrom(a => a.BookInfo.Category.Name))
 				.ForMember(b => b.AgeGroup, opt => opt.MapFrom(a => a.BookInfo.AgeGroup.Name))
 				.ForMember(b => b.NumberOfPages, opt => opt.MapFrom(a => a.BookInfo.NumberOfPages))
@@ -39,14 +38,12 @@ namespace MyLibraryMVC.Application.ViewModels.Book
 				.ForMember(b => b.Illustration, opt => opt.MapFrom(a => a.BookInfo.Illustration))
 				.ForMember(b => b.Binding, opt => opt.MapFrom(a => a.BookInfo.Binding))
 				.ForMember(b => b.YearOfPublication, opt => opt.MapFrom(a => a.PublishingInfo.YearOfPublication))
-				.ForMember(b => b.PublishingHouse, opt => opt.MapFrom(a => a.PublishingInfo.PublishingHouse))
-				//.ForMember(b => b.YearOfPublication, opt => opt.MapFrom(a => a.PublishingInfo.YearOfPublication))
+				.ForMember(b => b.PublishingHouse, opt => opt.MapFrom(a => a.PublishingInfo.PublishingHouse.Name))
 				.ForMember(b => b.NumberOfPublishing, opt => opt.MapFrom(a => a.PublishingInfo.NumberOfPublishing))
 				.ForMember(b => b.PublishingDate, opt => opt.MapFrom(a => a.PublishingInfo.PublishingDate))
-				.ForMember(b => b.CityOfPublishing, opt => opt.MapFrom(a => a.PublishingInfo.CityOfPublishing))
+				.ForMember(b => b.CityOfPublishing, opt => opt.MapFrom(a => a.PublishingInfo.CityOfPublishing.Name))
 				.ForMember(b => b.Description, opt => opt.MapFrom(a => a.BookInfo.Description))
-				.ForMember(b => b.Subtitle, opt => opt.MapFrom(a => a.BookInfo.Subtitle))
-				;
+				.ForMember(b => b.Subtitle, opt => opt.MapFrom(a => a.BookInfo.Subtitle));
 		}
 	}
 }

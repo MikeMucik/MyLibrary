@@ -18,6 +18,8 @@ namespace MyLibraryMVC.Application
 			services.AddTransient<IAgeGroupService, AgeGroupService>();
 			services.AddTransient<IAuthorService, AuthorService>();
 			services.AddTransient<IBookService, BookService>();
+			services.AddTransient<IBookInfoService, BookInfoService>();
+			services.AddTransient<IBookAuthorService, BookAuthorService>();
 			services.AddTransient<ICategoryService, CategoryService>();
 			services.AddTransient<ICityService, CityService>();
 			services.AddTransient<IHouseService, HouseService>();

@@ -1,0 +1,140 @@
+﻿@model MyLibraryMVC.Application.ViewModels.Book.NewBookVm
+
+@{
+	ViewData["Title"] = "AddBook";
+}
+
+<h1>AddBook</h1>
+
+<h4>NewBookVm</h4>
+<hr />
+<div class="row">
+	<div class="col-md-4">
+		<form asp-action="AddBook">
+			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+			<div class="form-group">
+
+				<input type="hidden" asp-for="Id" class="form-control" />
+
+			</div>
+			<div class="form-group">
+				<label asp-for="Title" class="control-label"></label>
+				<input asp-for="Title" class="form-control" />
+				<span asp-validation-for="Title" class="text-danger"></span>
+			</div>
+
+			<div class="author-container">
+				<div id="author-list">
+					@for (int i = 0; i < Model.Authors.Count+1; i++)
+					{
+						<div class="row">
+							<div class="form-group">
+								<label for="Authors[@i].Name" class="control-label">Imię</label>
+								<input id="Authors[@i]Name" name="Authors[@i].Name" class="form-control" />
+								<span data-valmsg-for="Authors[@i].Name" class="text-danger"></span>
+							</div>
+							<div class="form-group">
+								<label for="Authors[@i].SurName" class="control-label">Nazwisko</label>
+								<input id="Authors[@i]SurName" name="Authors[@i].SurName" class="form-control" />
+								<span data-valmsg-for="Authors[@i].SurName" class="text-danger"></span>
+							</div>
+						</div>
+					}
+				</div>
+			</div>
+
+
+			<div class="form-group">
+				<label asp-for="CategoryId" class="control-label"></label>
+				<select asp-for="CategoryId" class="form-control" asp-items="ViewBag.Categories"></select>
+				<span asp-validation-for="CategoryId" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="Description" class="control-label"></label>
+				<input asp-for="Description" class="form-control" />
+				<span asp-validation-for="Description" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<input type="submit" value="Create" class="btn btn-primary" />
+			</div>
+
+			@* @await Html.PartialAsync("_AddBookInfo", Model.BookInfo) *@
+		</form>
+		@* <!-- Przyciski do otwierania sekcji -->
+		<div>
+			<button class="btn btn-secondary" id="loadAuthor">Autor</button>
+			<button class="btn btn-secondary" id="loadBookInfo">Informacje o książce</button>
+			<button class="btn btn-secondary" id="loadPublicationInfo">Wydawnictwo</button>
+		</div>
+
+		<!-- Kontenery na PartialView -->
+		<div id="authorPartial"></div>
+		<div id="bookInfoPartial"></div>
+		<div id="publicationInfoPartial"></div> *@
+	</div>
+	
+</div>
+
+<div>
+	<a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+	@* <script>
+		document.addEventListener('input', (e) =>{
+			const container = document.querySelector('.author-container');
+			const authorList = document.getElementById('author-list');
+			const authors =  authorList.children;
+
+			const lastAuthor = authors[authors.length -1];
+			const secondLastAuthor = authors[authors.length - 2];
+
+			const lastNameInput = lastAuthor.querySelector('input[name^="Authors"][name$=".Name"]');
+			const secondLastNameInput = secondLastAuthor
+			? secondLastAuthor.querySelector('input[name^="Authors"][name$=".Name"]')
+			: null;
+
+			if (lastNameInput && e.target === lastNameInput && lastNameInput.value.trim() !== '') {
+				const nextIndex = authors.length;
+				
+				const newField = `<div class="row">
+							<div class="form-group">
+								<label for="Authors[${nextIndex}].Name" class="control-label">Imię</label>
+								<input id="Authors[${nextIndex}]Name" name="Authors[${nextIndex}].Name" class="form-control" />
+								<span data-valmsg-for="Authors[${nextIndex}].Name" class="text-danger"></span>
+							</div>
+							<div class="form-group">
+								<label for="Authors[${nextIndex}].SurName" class="control-label">Nazwisko</label>
+								<input id="Authors[${nextIndex}]SurName" name="Authors[${nextIndex}].SurName" class="form-control" />
+								<span data-valmsg-for="Authors[${nextIndex}].SurName" class="text-danger"></span>
+							</div>
+						</div>`
+						authorList.insertAdjacentHTML('beforeend', newField)
+			}
+			if (
+			lastNameInput &&
+			secondLastNameInput &&
+			lastNameInput.value.trim() === '' &&
+			secondLastNameInput.value.trim() === ''
+		) {
+			lastAuthor.remove();
+		}
+		})
+	
+		// Ładowanie PartialView za pomocą AJAX
+		$("#loadAuthor").click(function () {
+			$("#authorPartial").load("@Url.Action("AuthorDetails", "Book")");
+		});
+
+		$("#loadBookInfo").click(function () {
+			$("#bookInfoPartial").load("@Url.Action("AddBookInfo", "Book")");
+		});
+
+		$("#loadPublicationInfo").click(function () {
+			$("#publicationInfoPartial").load("@Url.Action("PublicationInfo", "Book")");
+		});
+	</script> *@
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
+}

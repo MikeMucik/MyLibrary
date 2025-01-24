@@ -13,8 +13,7 @@ namespace MyLibraryMVC.Domain.Model
 		public string? SurName { get; set; }
 		public string? RealName { get; set; }
 		public string? RealSurName { get; set; } 
-		public DateOnly DateOfBirth { get; set; }
-		public int BookId { get; set; }
-		public required virtual Book Book { get; set; }
+		public DateOnly? DateOfBirth { get; set; }
+		public required virtual ICollection<BookAuthor> BookAuthors { get; set; } = [];
 	}
 }
