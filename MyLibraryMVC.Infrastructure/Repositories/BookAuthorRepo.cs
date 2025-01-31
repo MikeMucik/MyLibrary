@@ -10,15 +10,21 @@ namespace MyLibraryMVC.Infrastructure.Repositories
 {
 	public class BookAuthorRepo : IBookAuthorRepo
 	{
-		//private readonly Context _context;
-		//public BookAuthorRepo(Context context)
-		//{
-		//	_context = context;
-		//}
+		private readonly Context _context;
+		public BookAuthorRepo(Context context)
+		{
+			_context = context;
+		}
+
+		public void AddBookAuthor(BookAuthor bookAuthorBase)
+		{
+			_context.BooksAuthor.Add(bookAuthorBase);
+			_context.SaveChanges();
+		}
 		//public void AddAuthor(BookAuthor author)
 		//{
 		//	_context.BooksAuthor.Add(author);
-			
+
 		//}
 	}
 }

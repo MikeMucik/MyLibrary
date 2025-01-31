@@ -13,7 +13,7 @@ namespace MyLibraryMVC.Domain.Model
 		public int? PublishingHouseId { get; set; }
 		public virtual House? PublishingHouse { get; set; }
 		public int? NumberOfPublishing { get; set; }
-		public DateTime? PublishingDate { get; set; }
+		public DateOnly? PublishingDate { get; set; }
 		public int? CityOfPublishingId { get; set; }
 		public virtual City? CityOfPublishing { get; set; }
 	}

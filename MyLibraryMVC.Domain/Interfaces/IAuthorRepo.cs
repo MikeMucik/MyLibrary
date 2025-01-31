@@ -8,7 +8,9 @@ using MyLibraryMVC.Domain.Model;
 namespace MyLibraryMVC.Domain.Interfaces
 {
 	public interface IAuthorRepo
-	{
-		//public int AddAuthor(Author author);
+	{		
+		IEnumerable<Author> GetAllAuthors();
+		int AddAuthor (Author author);
+		//Author GetAuthorById (int id);
 	}
 }

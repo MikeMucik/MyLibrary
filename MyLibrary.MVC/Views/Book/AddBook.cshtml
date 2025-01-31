@@ -60,7 +60,7 @@
 
 			@* @await Html.PartialAsync("_AddBookInfo", Model.BookInfo) *@
 		</form>
-		@* <!-- Przyciski do otwierania sekcji -->
+		<!-- Przyciski do otwierania sekcji -->
 		<div>
 			<button class="btn btn-secondary" id="loadAuthor">Autor</button>
 			<button class="btn btn-secondary" id="loadBookInfo">Informacje o książce</button>
@@ -70,7 +70,7 @@
 		<!-- Kontenery na PartialView -->
 		<div id="authorPartial"></div>
 		<div id="bookInfoPartial"></div>
-		<div id="publicationInfoPartial"></div> *@
+		<div id="publicationInfoPartial"></div>
 	</div>
 	
 </div>
@@ -80,7 +80,8 @@
 </div>
 
 @section Scripts {
-	@* <script>
+	 <script>
+@*
 		document.addEventListener('input', (e) =>{
 			const container = document.querySelector('.author-container');
 			const authorList = document.getElementById('author-list');
@@ -120,7 +121,7 @@
 			lastAuthor.remove();
 		}
 		})
-	
+	*@
 		// Ładowanie PartialView za pomocą AJAX
 		$("#loadAuthor").click(function () {
 			$("#authorPartial").load("@Url.Action("AuthorDetails", "Book")");
@@ -133,7 +134,7 @@
 		$("#loadPublicationInfo").click(function () {
 			$("#publicationInfoPartial").load("@Url.Action("PublicationInfo", "Book")");
 		});
-	</script> *@
+	</script> 
 	@{
 		await Html.RenderPartialAsync("_ValidationScriptsPartial");
 	}

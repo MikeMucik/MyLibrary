@@ -11,15 +11,24 @@ namespace MyLibraryMVC.Infrastructure.Repositories
 {
 	public class AuthorRepo : IAuthorRepo
 	{
-		//private readonly Context _context;
-		//public AuthorRepo(Context context)
+		private readonly Context _context;
+		public AuthorRepo(Context context)
+		{
+			_context = context;
+		}
+		public int AddAuthor(Author author)
+		{
+			_context.Authors.Add(author);
+			_context.SaveChanges();
+			return author.Id;
+		}
+		public IEnumerable<Author> GetAllAuthors()
+		{
+			return _context.Authors.ToList();
+		}
+		//public Author GetAuthorById(int id)
 		//{
-		//	_context = context;
-		//}
-		//public int AddAuthor(Author author)
-		//{
-		//	_context.Authors.Add(author);
-		//	return author.Id;
+		//	return _context.Authors.FirstOrDefault(x=>x.Id == id);
 		//}
 	}
 }

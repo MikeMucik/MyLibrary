@@ -1,0 +1,106 @@
+﻿@model MyLibraryMVC.Application.ViewModels.Book.ListBooksVm
+
+@{
+	ViewData["Title"] = "BookIndex";
+}
+
+<h1>Index</h1>
+
+<p>
+	<a asp-action="Create">Create New</a>
+</p>
+<form asp-action="BookIndex" asp-controller="Book" method="get" id="indexBooks">
+	<div class="row-md4">
+		<input type="text" asp-for="SearchString" name="searchString" id="searchString" />
+		<input type="submit" value="Wyszukaj" />
+	</div>
+	<div class="row">
+		<table class="table">
+			<thead>
+				<tr>
+					<th>
+						@Html.DisplayNameFor(model => model.Books.First().Title)
+					</th>
+					<th>
+						@Html.DisplayNameFor(model => model.Books.First().Authors)
+					</th>
+					<th>
+						@Html.DisplayNameFor(model => model.Books.First().Category)
+					</th>
+					<th>
+						@Html.DisplayNameFor(model => model.Books.First().AgeGroup)
+					</th>
+					<th>
+						@Html.DisplayNameFor(model => model.Books.First().IsLoan)
+					</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var item in Model.Books)
+				{
+					<tr>
+						<td>
+							@Html.DisplayFor(modelItem => item.Title)
+						</td>
+						<td>
+							@foreach (var it in item.Authors)
+							{
+								<div style="display: flex; gap: 10px;">
+									@Html.DisplayFor(item => it.Name)
+									@Html.DisplayFor(item => it.SurName)
+								</div>
+							}
+						</td>
+						<td>
+							@Html.DisplayFor(modelItem => item.Category)
+						</td>
+						<td>
+							@Html.DisplayFor(modelItem => item.AgeGroup)
+						</td>
+						<td>
+							@Html.DisplayFor(modelItem => item.IsLoan)
+						</td>
+						<td>
+							@Html.ActionLink("Edutuj książkę", "BookEdit", new { id = item.Id })
+							@Html.ActionLink("Szczegóły książki", "BookDetails", new { id = item.Id })
+							@Html.ActionLink("Usuń książkę", "BookDelete", new { id = item.Id })
+						</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
+	<div class="row-md4">
+		<div class="pagination">
+			<table>
+				<tr>
+					@for (int i = 1; i <= Math.Ceiling(Model.TotalCount / (double)Model.PageSize); i++)
+					{
+						<td>
+							@if (i == Model.CurrentPage)
+							{
+								<span>@i</span>
+							}
+							else
+							{
+								<a href="javascript:PagerClick(@i)">@i</a>
+							}
+						</td>
+					}
+				</tr>
+			</table>
+			<input type="hidden" name="pageNumber" id="pageNumber" />
+			<input type="hidden" name="pageSize" id="pageSize" value="12" />
+		</div>
+	</div>
+</form>
+@section Scripts
+{
+	<script type="text/javascript">
+		function PagerClick(index){
+		document.getElementById("pageNumber").value = index;
+		document.getElementById("indexBooks").submit();
+		}
+	</script>
+}

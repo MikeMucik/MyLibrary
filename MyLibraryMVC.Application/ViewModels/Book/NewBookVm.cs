@@ -7,6 +7,7 @@ using AutoMapper;
 using MyLibraryMVC.Application.Mapping;
 using MyLibraryMVC.Application.ViewModels.Author;
 using MyLibraryMVC.Application.ViewModels.BookInfo;
+using MyLibraryMVC.Application.ViewModels.Info;
 using MyLibraryMVC.Domain.Model;
 
 namespace MyLibraryMVC.Application.ViewModels.Book
@@ -15,18 +16,20 @@ namespace MyLibraryMVC.Application.ViewModels.Book
 		
 	{
 		public int Id { get; set; }
-		public string Title { get; set; }
-		public List<AuthorVm> Authors { get; set; } = new List<AuthorVm>();	
+		public string Title { get; set; }		
+		public List<NewAuthorVm> Authors { get; set; } = new List<NewAuthorVm>();	
 		public int CategoryId { get; set; }
 		public string Description { get; set; }
-		public NewBookInfoVm? BookInfo { get; set; } = new NewBookInfoVm();
+		public NewBookInfoVm? BookInfo { get; set; }
+		public NewInfoVm? NewInfo { get; set; }				
 		public void Mapping(Profile profile)
 		{
-			profile.CreateMap<NewBookVm, Domain.Model.Book>()
-				.ForMember(a => a.BookAuthors, dest => dest.MapFrom(b => b.Authors))
+			profile.CreateMap<NewBookVm, Domain.Model.Book>()				
+				.ForMember(a => a.BookAuthors, dest => dest.Ignore())
 				.ForPath(a=>a.BookInfo.CategoryId, dest=>dest.MapFrom(b => b.CategoryId))
 				.ForPath(a => a.BookInfo.Description, dest => dest.MapFrom(b => b.Description))
-				.ForMember(a=>a.BookInfo, dest=> dest.MapFrom(b=>b.BookInfo));			
+				.ForMember(a=>a.BookInfo, dest=> dest.MapFrom(b=>b.BookInfo))
+				.ForMember(a=>a.PublishingInfo, dest=> dest.MapFrom(b=>b.NewInfo));			
 		}
 	}
 }

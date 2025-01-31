@@ -1,0 +1,215 @@
+﻿@model MyLibraryMVC.Application.ViewModels.Book.NewBookVm
+
+@{
+	ViewData["Title"] = "AddBook";
+}
+
+<h1>Dodaj książkę</h1>
+
+<h4>Formularz</h4>
+<hr />
+<div class="container">
+
+	<form asp-action="AddBook">
+
+		<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+		<div class="row">
+			<div class="col-md-4">
+				<div class="form-group">
+					<input type="hidden" asp-for="Id" class="form-control" />
+				</div>
+				<div class="form-group">
+					<label asp-for="Title" class="control-label">Tytuł książki</label>
+					<input asp-for="Title" class="form-control" />
+					<span asp-validation-for="Title" class="text-danger"></span>
+				</div>
+				<div id="author-list">
+					<div class="row author-item">
+						@for (int i = 0; i <= Model.Authors.Count; i++)
+						{
+							<div class="form-group">
+								<select id="Authors[@i].Id" name="Authors[@i].Id" class="form-control" asp-items="ViewBag.Authors">
+									<option value="">Wybierz autora z listy lub wpisz nowego</option>
+								</select>
+								<span data-valmsg-for="Authors[@i].Id" class="text-danger"></span>
+							</div>
+							<div class="form-group">
+								<label for="Authors[@i].Name" class="control-label">Imię/Psedonim</label>
+								<input id="Authors[@i].Name" name="Authors[@i].Name" class="form-control" />
+								<span data-valmsg-for="Authors[@i].Name" class="text-danger"></span>
+							</div>
+							<div class="form-group">
+								<label for="Authors[@i].SurName" class="control-label">Nazwisko/Pseudonim</label>
+								<input id="Authors[@i].SurName" name="Authors[0].SurName" class="form-control" />
+								<span data-valmsg-for="Authors[@i].SurName" class="text-danger"></span>
+							</div>
+							
+							<button type="button" class="btn btn-dark addDetails-author" formnovalidate>Dodaj szczegóły o autorze</button>
+						
+						}
+					</div>
+					<button type="button" class="btn btn-secondary" id="addAuthor" formnovalidate>Dodaj autora</button>
+				</div>
+
+				<div class="form-group">
+					<label asp-for="CategoryId" class="control-label">Kategoria</label>
+					<select asp-for="CategoryId" class="form-control" asp-items="ViewBag.Categories"></select>
+					<span asp-validation-for="CategoryId" class="text-danger"></span>
+				</div>
+				<div class="form-group">
+					<label asp-for="Description" class="control-label">Opis</label>
+					<input asp-for="Description" class="form-control" />
+					<span asp-validation-for="Description" class="text-danger"></span>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div id="bookInfoPartial"></div>
+			</div>
+			<div class="col-md-4">
+				<div id="publicationInfoPartial"></div>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div id="authorDetails"></div>
+		</div>
+		<div class="form-group">
+			<input type="submit" value="Dodaj książkę do biblioteki" class="btn btn-primary" />
+		</div>
+	</form>
+</div>
+<div>
+	<button class="btn btn-secondary" id="loadBookInfo">Informacje o książce</button>
+	<button class="btn btn-secondary" id="loadPublicationInfo">Wydawnictwo ksiązki</button>
+</div>
+
+<div>
+	<a asp-action="IndexBook">Wróć do listy książek</a>
+</div>
+
+@section Scripts {
+	<script>
+			 var authorsList = @Html.Raw(Json.Serialize(ViewBag.Authors));
+			let nextIndex = @Model.Authors.Count
+			$("#addAuthor").click(function() {
+				if (nextIndex ===0){
+				nextIndex++;}
+				const authorList = document.getElementById('author-list');
+				let options ="";
+				options += `<option value="">--Wybierz z listy lub wpisz--</option>`;
+
+				for (let i = 0 ; i < authorsList.length ; i++)
+				{
+					options +=`<option value="${authorsList[i].value}">${authorsList[i].text}</option>`
+				};
+
+				const newField = `<div class="row author-item">
+								<div class="form-group">
+
+									<select id="Authors[${nextIndex}].Id" name="Authors[${nextIndex}].Id" class="form-control">
+									 ${options}
+									</select>
+									<span data-valmsg-for="Authors[${nextIndex}].Id" class="text-danger"></span>
+								</div>
+								<div class="form-group">
+									<label for="Authors[${nextIndex}].Name" class="control-label">Imię/Psedonim</label>
+									<input id="Authors[${nextIndex}].Name" name="Authors[${nextIndex}].Name" class="form-control" />
+									<span data-valmsg-for="Authors[${nextIndex}].Name" class="text-danger"></span>
+								</div>
+								<div class="form-group">
+									<label for="Authors[${nextIndex}].SurName" class="control-label">Nazwisko/Psedonim</label>
+									<input id="Authors[${nextIndex}].SurName" name="Authors[${nextIndex}].SurName" class="form-control" />
+									<span data-valmsg-for="Authors[${nextIndex}].SurName" class="text-danger"></span>
+								</div>
+									<button type="button" class="btn btn-danger remove-author" formnovalidate>Usuń autora</button>
+									<button type="button" class="btn btn-dark addDetails-author" formnovalidate>Dodaj szczegóły o autorze</button>
+							</div>`
+							authorList.insertAdjacentHTML('beforeend', newField);
+							nextIndex++;
+				console.log({nextIndex});
+			});
+
+			$(document).on("click", ".remove-author", function () {
+				$(this).closest(".author-item").remove();
+				renumerateAuthors();
+			});
+
+			function renumerateAuthors() {
+
+				$(".author-item").each(function (index) {
+					$(this).find("select, input, label, span").each(function () {
+						let oldName = $(this).attr("name");
+						if (oldName) {
+							let newName = oldName.replace(/\[\d+\]/, `[${index}]`);
+							$(this).attr("name", newName);
+						}
+						let oldId = $(this).attr("id");
+						if (oldId) {
+							let newId = oldId.replace(/\[\d+\]/, `[${index}]`);
+							$(this).attr("id", newId);
+						}
+					});
+				});
+				nextIndex = $(".author-item").length;
+				console.log({nextIndex});
+			}
+
+			$("#loadBookInfo").click(function () {
+				const bookInfoPartial = $("#bookInfoPartial");
+				if(bookInfoPartial.is(":empty")){
+				$("#bookInfoPartial").load("@Url.Action("AddBookInfo", "Book")");
+				} else{
+				bookInfoPartial.empty();
+				}
+			});
+
+			$("#loadPublicationInfo").click(function () {
+				const publicationInfoPartial = $("#publicationInfoPartial");
+				if(publicationInfoPartial.is(":empty")){
+				$("#publicationInfoPartial").load("@Url.Action("AddPublishingInfo", "Book")");
+				}else {
+					publicationInfoPartial.empty();
+				}
+			});
+
+			$(document).on("click", ".addDetails-author", function(){
+				
+				let authorItem = $(this).closest(".author-item");
+				let number = authorItem.index();
+				console.log({number});
+				let currentIndex = authorItem.index() -1;
+				if (currentIndex === -1){currentIndex = 0}
+				console.log({currentIndex});
+				if (authorItem.find(".author-details").length===0) {
+					
+						let addAuthorDetails = `<div class="author-details"">
+				
+					<div class="form-group">
+						<label for="Authors[${currentIndex}].RealName" class="control-label">Prawdziwe Imię</label>
+						<input id="Authors[${currentIndex}].RealName" name="Authors[${currentIndex}].RealName" class="form-control" />
+						<span data-valmsg-for="Authors[${currentIndex}].RealName" class="text-danger"></span>
+					</div>
+					<div class="form-group">
+						<label for="Authors[${currentIndex}].RealSurName" class="control-label">Prawdziwe Nazwisko</label>
+						<input id="Authors[${currentIndex}].RealSurName" name="Authors[${currentIndex}].RealSurName" class="form-control" />
+						<span data-valmsg-for="Authors[${currentIndex}].RealSurName" class="text-danger"></span>
+					</div>
+					<div class="form-group">
+						<label for="Authors[${currentIndex}].DateOfBirth" class="control-label">Data urodzin</label>
+						<input type="date" id="Authors[${currentIndex}].DateOfBirth" name="Authors[${currentIndex}].DateOfBirth" class="form-control" />
+						<span data-valmsg-for="Authors[${currentIndex}].DateOfBirth" class="text-danger"></span>
+					</div>
+						<button type="button" class="btn btn-secondary closeDetails-author" formnovalidate>Zamknij</button>
+				
+			</div>`
+			authorItem.append(addAuthorDetails);			
+			}
+		});
+		$(document).on("click", ".closeDetails-author", function(){
+			$(this).closest(".author-details").remove();
+
+		});
+	</script>
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
+}

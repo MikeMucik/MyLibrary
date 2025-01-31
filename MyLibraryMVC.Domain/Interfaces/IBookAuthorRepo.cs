@@ -10,5 +10,6 @@ namespace MyLibraryMVC.Domain.Interfaces
 	public interface IBookAuthorRepo
 	{
 		//void AddAuthor(BookAuthor author);
+		void AddBookAuthor(BookAuthor bookAuthorBase);
 	}
 }

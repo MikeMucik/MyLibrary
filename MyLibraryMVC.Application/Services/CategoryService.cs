@@ -20,19 +20,7 @@ namespace MyLibraryMVC.Application.Services
 		{
 			_categoryRepo = categoryRepo;
 			_mapper = mapper;
-		}
-
-		//public ListCategoryVm GetAllCategories()
-		//{
-		//	var categories = _categoryRepo.GetAllCategories();
-		//	var categoryVm = _mapper.Map<List<CategoryForListVm>>(categories);
-		//	var categoryList = new ListCategoryVm
-		//	{
-		//		Categories = categoryVm,
-		//	};
-			
-		//	return categoryList;
-		//}
+		}	
 
 		public List<SelectListItem> GetCategoryForSelectList()
 		{

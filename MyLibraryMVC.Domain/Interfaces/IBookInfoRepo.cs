@@ -9,6 +9,6 @@ namespace MyLibraryMVC.Domain.Interfaces
 {
 	public interface IBookInfoRepo
 	{
-		int AddBookInfo(BookInfo newBookInfo);
+		//int AddBookInfo(BookInfo newBookInfo);
 	}
 }

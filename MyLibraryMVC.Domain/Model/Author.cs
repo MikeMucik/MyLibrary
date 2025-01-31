@@ -9,11 +9,11 @@ namespace MyLibraryMVC.Domain.Model
 	public class Author
 	{
 		public int Id { get; set; }
-		public required string Name { get; set; }
+		public string? Name { get; set; }
 		public string? SurName { get; set; }
 		public string? RealName { get; set; }
 		public string? RealSurName { get; set; } 
 		public DateOnly? DateOfBirth { get; set; }
-		public required virtual ICollection<BookAuthor> BookAuthors { get; set; } = [];
+		public virtual ICollection<BookAuthor> BookAuthors { get; set; } = new List<BookAuthor>();
 	}
 }

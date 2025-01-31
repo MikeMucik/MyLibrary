@@ -1,0 +1,45 @@
+﻿@* @model MyLibraryMVC.Application.ViewModels.BookInfo.NewBookInfoVm
+
+<h4>NewBookInfoVm</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+
+        <div class="form-group">
+
+            <input type="hidden" asp-for="Authors.Id" class="form-control" />
+
+        </div>
+        <div class="form-group">
+            <label asp-for="Authors.Name" class="control-label"></label>
+            <input asp-for="Authors.Name" class="form-control" />
+            <span asp-validation-for="Authors.Name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Authors.SurName" class="control-label"></label>
+            <input asp-for="Authors.SurName" class="form-control" />
+            <span asp-validation-for="Authors.SurName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Authors.RealName" class="control-label"></label>
+            <input asp-for="Authors.RealName" class="form-control" />
+            <span asp-validation-for="Authors.RealName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Authors.RealSurName" class="control-label"></label>
+            <input asp-for="Authors.RealSurName" class="form-control" />
+            <span asp-validation-for="Authors.RealSurName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Authors.DateOfBirth" class="control-label"></label>
+            <input asp-for="Authors.DateOfBirth" class="form-control" />
+            <span asp-validation-for="Authors.DateOfBirth" class="text-danger"></span>
+        </div>
+       
+    </div>
+</div>
+
+@* @section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+} *@
+ 

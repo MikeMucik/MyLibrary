@@ -7,12 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="ViewModels\City\" />
-    <Folder Include="ViewModels\House\" />
-    <Folder Include="ViewModels\Info\" />
+    <Folder Include="ViewModels\BookAuthor\" />
     <Folder Include="ViewModels\Loan\" />
     <Folder Include="ViewModels\ListUsersLoan\" />
-    <Folder Include="ViewModels\BookAuthor\" />
   </ItemGroup>
 
   <ItemGroup>

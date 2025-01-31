@@ -13,6 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyLibraryMVC.Test", "MyLibr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyLibrary.MVC", "MyLibrary.MVC\MyLibrary.MVC.csproj", "{37C7B305-4975-4AF0-9AFC-C58B02B59BEE}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{6328F089-5E89-4324-9912-7F00EC7EC98C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyLibraryHome", "MyLibraryHome\MyLibraryHome.csproj", "{33D49197-55D8-4D99-9784-4AB9D14F6B45}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,9 +43,16 @@ Global
 		{37C7B305-4975-4AF0-9AFC-C58B02B59BEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{37C7B305-4975-4AF0-9AFC-C58B02B59BEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{37C7B305-4975-4AF0-9AFC-C58B02B59BEE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{33D49197-55D8-4D99-9784-4AB9D14F6B45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33D49197-55D8-4D99-9784-4AB9D14F6B45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33D49197-55D8-4D99-9784-4AB9D14F6B45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33D49197-55D8-4D99-9784-4AB9D14F6B45}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{33D49197-55D8-4D99-9784-4AB9D14F6B45} = {6328F089-5E89-4324-9912-7F00EC7EC98C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7C35A534-51F9-44CE-A0DF-D0C15A4D0C7F}

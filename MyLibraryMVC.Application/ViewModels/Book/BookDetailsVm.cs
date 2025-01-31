@@ -23,7 +23,7 @@ namespace MyLibraryMVC.Application.ViewModels.Book
 		public int YearOfPublication { get; set; }
 		public string? PublishingHouse { get; set; }
 		public int? NumberOfPublishing { get; set; }
-		public DateTime PublishingDate { get; set; }
+		public DateOnly PublishingDate { get; set; }
 		public string? CityOfPublishing { get; set; }
 		public string? Description { get; set; }
 		public string? Subtitle { get; set; }

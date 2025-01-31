@@ -15,7 +15,8 @@ namespace MyLibraryMVC.Application.Services
 	{
 		private readonly IAgeGropuRepo _ageGroupRepo;
 		private readonly IMapper _mapper;
-		public AgeGroupService(IAgeGropuRepo ageGropuRepo,
+		public AgeGroupService(
+			IAgeGropuRepo ageGropuRepo,
 						IMapper mapper)
 		{
 			_ageGroupRepo = ageGropuRepo;
