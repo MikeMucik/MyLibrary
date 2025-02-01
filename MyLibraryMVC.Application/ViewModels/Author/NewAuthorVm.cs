@@ -8,7 +8,8 @@ using MyLibraryMVC.Application.Mapping;
 
 namespace MyLibraryMVC.Application.ViewModels.Author
 {
-	public class NewAuthorVm : IMapFrom<Domain.Model.Author>
+	public class NewAuthorVm : IMapFrom<Domain.Model.Author>,
+								IMapFrom<Domain.Model.BookAuthor>
 	{
 		public int? Id { get; set; }
 		public string? Name { get; set; }
@@ -25,6 +26,8 @@ namespace MyLibraryMVC.Application.ViewModels.Author
 		{
 			profile.CreateMap<NewAuthorVm, Domain.Model.Author>()
 				.ReverseMap();
+			profile.CreateMap<Domain.Model.BookAuthor, NewAuthorVm>()
+				.ForMember(a=>a.Id, b=>b.MapFrom(c=>c.AuthorId));
 		}
 	}
 }

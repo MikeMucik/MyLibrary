@@ -20,7 +20,8 @@ namespace MyLibraryMVC.Application.ViewModels.BookInfo
 		public int? AgeGroupId { get; set; }		
 		public void Mapping(Profile profile)
 		{
-			profile.CreateMap<NewBookInfoVm, Domain.Model.BookInfo>();
+			profile.CreateMap<NewBookInfoVm, Domain.Model.BookInfo>()
+				.ReverseMap();
 		}
 	}
 }

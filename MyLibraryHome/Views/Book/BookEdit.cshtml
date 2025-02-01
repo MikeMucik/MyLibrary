@@ -1,14 +1,22 @@
 ﻿@model MyLibraryMVC.Application.ViewModels.Book.NewBookVm
 
 @{
-	ViewData["Title"] = "AddBook";
+	ViewData["Title"] = "BookEdit";
 }
 
-<h1>Dodaj książkę</h1>
+<h1>EditBook</h1>
 
 <h4>Formularz</h4>
 <hr />
 <div class="container">
+	@if (Model.BookInfo != null)
+	{
+		@await Html.PartialAsync("_AddBookInfo", Model)
+	}
+	else
+	{
+		<p>Brak danych o książce.</p>
+	}
 
 	<form asp-action="AddBook">
 
@@ -25,7 +33,7 @@
 				</div>
 				<div id="author-list">
 					<div class="row author-item">
-						@for (int i = 0; i <= Model.Authors.Count; i++)
+						@for (int i = 0; i < Model.Authors.Count; i++)
 						{
 							<div class="form-group">
 								<select id="Authors[@i].Id" name="Authors[@i].Id" class="form-control" asp-items="ViewBag.Authors">
@@ -43,9 +51,9 @@
 								<input id="Authors[@i].SurName" name="Authors[@i].SurName" class="form-control" />
 								<span data-valmsg-for="Authors[@i].SurName" class="text-danger"></span>
 							</div>
-							
+
 							<button type="button" class="btn btn-dark addDetails-author" formnovalidate>Dodaj szczegóły o autorze</button>
-						
+
 						}
 					</div>
 					<button type="button" class="btn btn-secondary" id="addAuthor" formnovalidate>Dodaj autora</button>
@@ -91,8 +99,7 @@
 			 var authorsList = @Html.Raw(Json.Serialize(ViewBag.Authors));
 			let nextIndex = @Model.Authors.Count
 			$("#addAuthor").click(function() {
-				if (nextIndex ===0){
-				nextIndex++;}
+				
 				const authorList = document.getElementById('author-list');
 				let options ="";
 				options += `<option value="">--Wybierz z listy lub wpisz--</option>`;
@@ -150,13 +157,12 @@
 						let oldFor = $(this).attr("for");
 						if (oldFor) {
 							let newFor = oldFor.replace(/\[\d*\]/, `[${index}]`);
-							$(this).attr("for", newFor);			
+							$(this).attr("for", newFor);		
 						}
 					});
 				});
 				nextIndex = $(".author-item").length;
 				console.log({nextIndex});
-				 $(".author-item select").val("");
 			}
 
 			$("#loadBookInfo").click(function () {
@@ -178,17 +184,13 @@
 			});
 
 			$(document).on("click", ".addDetails-author", function(){
-				
+
 				let authorItem = $(this).closest(".author-item");
-				let number = authorItem.index();
-				console.log({number});
-				let currentIndex = authorItem.index() -1;
-				if (currentIndex === -1){currentIndex = 0}
-				console.log({currentIndex});
+				let currentIndex = authorItem.index();
 				if (authorItem.find(".author-details").length===0) {
-					
+
 						let addAuthorDetails = `<div class="author-details"">
-				
+
 					<div class="form-group">
 						<label for="Authors[${currentIndex}].RealName" class="control-label">Prawdziwe Imię</label>
 						<input id="Authors[${currentIndex}].RealName" name="Authors[${currentIndex}].RealName" class="form-control" />
@@ -205,9 +207,9 @@
 						<span data-valmsg-for="Authors[${currentIndex}].DateOfBirth" class="text-danger"></span>
 					</div>
 						<button type="button" class="btn btn-secondary closeDetails-author" formnovalidate>Zamknij</button>
-				
+
 			</div>`
-			authorItem.append(addAuthorDetails);			
+			authorItem.append(addAuthorDetails);
 			}
 		});
 		$(document).on("click", ".closeDetails-author", function(){

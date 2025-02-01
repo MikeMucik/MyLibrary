@@ -61,11 +61,54 @@ namespace MyLibraryMVC.Application.Services
 			};
 			return booksList;
 		}
+		public FindBookVm FindBook(int pageSize, int pageNumber, int authorId,
+			int categoryId, int ageGroupId, int houseOfPublishing)
+		{
+			var books = _bookRepo.GetBooksByDetais(authorId, categoryId, ageGroupId, houseOfPublishing)
+				.OrderBy(x => x.Title)				
+				.ProjectTo<BookForListVm>(_mapper.ConfigurationProvider)
+				.ToList();
+			var booksToShow = books
+				.Skip(pageSize * (pageNumber - 1))
+				.Take(pageSize)
+				.ToList();
+			var booksList = new FindBookVm()
+			{
+				Books = booksToShow,
+				PageNumber = pageNumber,
+				PageSize = pageSize,
+				CategoryId = categoryId,
+				AgeGroupId = ageGroupId,
+				HouseOfPublishingId = houseOfPublishing ,
+				TotalCount = books.Count()
+			};
+			return booksList;
+		}
 		public BookDetailsVm GetBookDetails(int id)
 		{
 			var book = _bookRepo.GetBookDetails(id);
 			var bookDetails = _mapper.Map<BookDetailsVm>(book);
 			return bookDetails;
+		}
+		public NewBookVm GetBookToEdit(int id)
+		{
+			var  book = _bookRepo.GetBookDetails(id);
+			var bookVm = _mapper.Map<NewBookVm>(book);
+			return bookVm;
+		}
+		public int UpdateBook(NewBookVm model)
+		{
+
+			Book book = _mapper.Map<Book>(model);
+			book.BookAuthors.Clear();
+			foreach (var item in model.Authors)
+			{
+				var authorId = _authorService.GetOrAddAuthor(item);
+				var bookAuthorNew = new BookAuthor { AuthorId = authorId, BookId = model.Id };
+				_bookAuthorService.AddBookAuthor(bookAuthorNew);
+			}
+			_bookRepo.UpdateBook(book);
+			return model.Id;
 		}
 	}
 }

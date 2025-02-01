@@ -3,6 +3,7 @@ using MyLibraryMVC.Application.Interfaces;
 using MyLibraryMVC.Application.ViewModels.Author;
 using MyLibraryMVC.Application.ViewModels.Book;
 using MyLibraryMVC.Application.ViewModels.BookInfo;
+using Newtonsoft.Json;
 
 namespace MyLibraryHome.Controllers
 {
@@ -60,12 +61,55 @@ namespace MyLibraryHome.Controllers
 				return RedirectToAction("BookDetails", new { id = bookId });
 			}
 			return View(model);
+		}	
+		[HttpGet]
+		public IActionResult FindBook(int pageSize = 12, int pageNumber = 1,
+			int authorId= 0 ,int categoryId = 0, int ageGroupId = 0, int houseOfPublishingId = 0)
+		{
+			FillViewBags();
+			var model = _bookService.FindBook(pageSize, pageNumber,
+				authorId, categoryId, ageGroupId, houseOfPublishingId);
+			return View(model);
+		}
+		[HttpPost]
+		public IActionResult FindBook(int pageSize, int? pageNumber, int authorId,
+			int categoryId, int ageGroupId,  int houseOfPublishingId)
+			
+		{
+			if ( pageNumber == null || pageNumber ==0)
+			{
+				pageNumber = 1;
+			} ;
+				var model = _bookService.FindBook(pageSize, pageNumber.Value, 
+				authorId ,categoryId, ageGroupId, houseOfPublishingId);
+			FillViewBags();
+			return View(model);
+		}
+		[HttpGet]
+		public IActionResult BookEdit(int id)
+		{
+			FillViewBags();
+			var model = _bookService.GetBookToEdit(id);
+			Console.WriteLine(JsonConvert.SerializeObject(model.BookInfo, Formatting.Indented));
+
+			return View(model);
+		}
+		[HttpPost]
+		public IActionResult BookEdit(NewBookVm model)
+		{
+			FillViewBags();
+			if (ModelState.IsValid)
+			{
+				var updatedBookId = _bookService.UpdateBook(model);
+				return RedirectToAction("BookDetails", new { id = updatedBookId });
+			}
+			return View(model);
 		}
 		[HttpGet]
 		public IActionResult AddBookInfo()
 		{
-			FillViewBags();			
-			return PartialView("_AddBookInfo");				
+			FillViewBags();
+			return PartialView("_AddBookInfo");
 		}
 		[HttpGet]
 		public IActionResult AddPublishingInfo()
@@ -73,13 +117,6 @@ namespace MyLibraryHome.Controllers
 			FillViewBags();
 			return PartialView("_AddInfo");
 		}
-		[HttpGet]
-		public IActionResult FindBook()
-		{
-			FillViewBags();
-			return View(new FindBookVm());
-		}
-		
 		public void FillViewBags()
 		{
 			ViewBag.Categories = _categoryService.GetCategoryForSelectList();
@@ -90,7 +127,3 @@ namespace MyLibraryHome.Controllers
 		}
 	}
 }
-//var model = new NewBookVm()
-//{
-//	Authors = new List<NewAuthorVm>
-//			};

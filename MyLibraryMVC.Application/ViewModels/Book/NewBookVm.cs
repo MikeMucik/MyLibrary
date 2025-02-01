@@ -29,7 +29,17 @@ namespace MyLibraryMVC.Application.ViewModels.Book
 				.ForPath(a=>a.BookInfo.CategoryId, dest=>dest.MapFrom(b => b.CategoryId))
 				.ForPath(a => a.BookInfo.Description, dest => dest.MapFrom(b => b.Description))
 				.ForMember(a=>a.BookInfo, dest=> dest.MapFrom(b=>b.BookInfo))
-				.ForMember(a=>a.PublishingInfo, dest=> dest.MapFrom(b=>b.NewInfo));			
+				.ForMember(a=>a.PublishingInfo, dest=> dest.MapFrom(b=>b.NewInfo))
+				
+				;
+
+			profile.CreateMap<Domain.Model.Book, NewBookVm>()
+				.ForMember(a => a.BookInfo, b => b.MapFrom(c => c.BookInfo))
+				.ForMember(a => a.NewInfo, b => b.MapFrom(c => c.PublishingInfo))
+				.ForMember(a => a.Authors, b => b.MapFrom(c => c.BookAuthors))
+				.ForMember(a=>a.CategoryId, b=>b.MapFrom(c=>c.BookInfo.CategoryId))
+				.ForMember(a=>a.Description, b=>b.MapFrom(c=>c.BookInfo.Description));
+				
 		}
 	}
 }

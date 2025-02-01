@@ -11,6 +11,10 @@ namespace MyLibraryMVC.Domain.Interfaces
 	{
 		int AddBook(Book newBook);
 		IQueryable<Book> GetAllBooks();
+		//Book GetBookById(int id);
 		Book GetBookDetails(int id);
+		IQueryable<Book> GetBooksByDetais(int authorId, int categoryId,
+			 int ageGroupId, int houseOfPublishingId);
+		void UpdateBook(Book book);
 	}
 }

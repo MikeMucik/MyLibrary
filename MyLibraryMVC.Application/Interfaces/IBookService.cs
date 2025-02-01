@@ -12,5 +12,9 @@ namespace MyLibraryMVC.Application.Interfaces
 		int AddBook(NewBookVm model);		
 		ListBooksVm GetAllBooks(int pageSize, int pageNumber, string searchString);
 		BookDetailsVm GetBookDetails(int id);
+		FindBookVm FindBook(int pageSize, int pageNumber, int authorId,
+			int categoryId, int ageGroupId, int houseOfPublishing);
+		NewBookVm GetBookToEdit(int id);
+		int UpdateBook(NewBookVm model);
 	}
 }

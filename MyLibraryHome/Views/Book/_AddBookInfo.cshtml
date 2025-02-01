@@ -19,7 +19,8 @@
 <div class="form-group">
 	<div class="checkbox">
 		<div class="form-check">
-			<input type="checkbox" name="BookInfo.Illustration" checked="@Model?.BookInfo.Illustration" value="false" class="form-check-input" id="BookInfo.Illustration" />
+			<input asp-for="BookInfo.Illustration" class="form-check-input" />
+			
 			<label class="form-check-label" for="BookInfo.Illustration">Ilustracje</label>
 		</div>
 	</div>

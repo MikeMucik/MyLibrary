@@ -11,6 +11,11 @@ namespace MyLibraryMVC.Application.ViewModels.Book
 {
 	public class FindBookVm : IMapFrom<Domain.Model.Book>
 	{
+		public List<BookForListVm>? Books { get; set; }
+		public int CurrentPage { get; set; }
+		public int PageNumber { get; set; }
+		public int PageSize { get; set; }
+		public int TotalCount { get; set; }
 		public int AuthorId { get; set; }
 		public int NumberPages { get; set; }
 		public int CategoryId { get; set; }
