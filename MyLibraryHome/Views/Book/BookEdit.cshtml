@@ -9,22 +9,14 @@
 <h4>Formularz</h4>
 <hr />
 <div class="container">
-	@if (Model.BookInfo != null)
-	{
-		@await Html.PartialAsync("_AddBookInfo", Model)
-	}
-	else
-	{
-		<p>Brak danych o książce.</p>
-	}
 
-	<form asp-action="AddBook">
+	<form asp-action="BookEdit">
 
 		<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 		<div class="row">
 			<div class="col-md-4">
 				<div class="form-group">
-					<input type="hidden" asp-for="Id" class="form-control" />
+					<input type="hidden" asp-for="Id" class="form-control" id="id" />
 				</div>
 				<div class="form-group">
 					<label asp-for="Title" class="control-label">Tytuł książki</label>
@@ -36,7 +28,8 @@
 						@for (int i = 0; i < Model.Authors.Count; i++)
 						{
 							<div class="form-group">
-								<select id="Authors[@i].Id" name="Authors[@i].Id" class="form-control" asp-items="ViewBag.Authors">
+								<select id="Authors[@i].Id" name="Authors[@i].Id" class="form-control" 
+								asp-for="Authors[i].Id" asp-items="ViewBag.AuthorsSelect">
 									<option value="">Wybierz autora z listy lub wpisz nowego</option>
 								</select>
 								<span data-valmsg-for="Authors[@i].Id" class="text-danger"></span>
@@ -51,9 +44,8 @@
 								<input id="Authors[@i].SurName" name="Authors[@i].SurName" class="form-control" />
 								<span data-valmsg-for="Authors[@i].SurName" class="text-danger"></span>
 							</div>
-
+							<button type="button" class="btn btn-danger remove-author" formnovalidate>Usuń autora</button>
 							<button type="button" class="btn btn-dark addDetails-author" formnovalidate>Dodaj szczegóły o autorze</button>
-
 						}
 					</div>
 					<button type="button" class="btn btn-secondary" id="addAuthor" formnovalidate>Dodaj autora</button>
@@ -71,10 +63,10 @@
 				</div>
 			</div>
 			<div class="col-md-4">
-				<div id="bookInfoPartial"></div>
+				<div id="bookInfoContainer"></div>				
 			</div>
 			<div class="col-md-4">
-				<div id="publicationInfoPartial"></div>
+				<div id="infoContainer"></div>
 			</div>
 		</div>
 		<div class="col-md-4">
@@ -86,32 +78,28 @@
 	</form>
 </div>
 <div>
-	<button class="btn btn-secondary" id="loadBookInfo">Informacje o książce</button>
+	<button class="btn btn-secondary" id="loadBookInfo" data-book-id>Informacje o książce</button>
 	<button class="btn btn-secondary" id="loadPublicationInfo">Wydawnictwo ksiązki</button>
 </div>
 
 <div>
-	<a asp-action="IndexBook">Wróć do listy książek</a>
+	<a asp-action="BookIndex">Wróć do listy książek</a>
 </div>
 
 @section Scripts {
 	<script>
 			 var authorsList = @Html.Raw(Json.Serialize(ViewBag.Authors));
 			let nextIndex = @Model.Authors.Count
-			$("#addAuthor").click(function() {
-				
+			$("#addAuthor").click(function() {				
 				const authorList = document.getElementById('author-list');
 				let options ="";
 				options += `<option value="">--Wybierz z listy lub wpisz--</option>`;
-
 				for (let i = 0 ; i < authorsList.length ; i++)
 				{
 					options +=`<option value="${authorsList[i].value}">${authorsList[i].text}</option>`
 				};
-
 				const newField = `<div class="row author-item">
 								<div class="form-group">
-
 									<select id="Authors[${nextIndex}].Id" name="Authors[${nextIndex}].Id" class="form-control">
 									 ${options}
 									</select>
@@ -141,7 +129,6 @@
 			});
 
 			function renumerateAuthors() {
-
 				$(".author-item").each(function (index) {
 					$(this).find("select, input, label, span").each(function () {
 						let oldName = $(this).attr("name");
@@ -165,32 +152,59 @@
 				console.log({nextIndex});
 			}
 
-			$("#loadBookInfo").click(function () {
-				const bookInfoPartial = $("#bookInfoPartial");
-				if(bookInfoPartial.is(":empty")){
-				$("#bookInfoPartial").load("@Url.Action("AddBookInfo", "Book")");
-				} else{
-				bookInfoPartial.empty();
-				}
-			});
-
+			$(document).ready(function () {
+    $("#loadBookInfo").click(function () {
+        let bookId = $(this).data("book-id");
+		bookId = document.getElementById('id').value;
+				console.log({bookId});
+		let container = $("#bookInfoContainer");
+		if (container.is(":empty")){
+        $.ajax({
+            url: "/Book/GetBookInfoPartial", // URL akcji w kontrolerze
+            type: "GET",
+            data: { bookId: bookId },
+            success: function (data) {
+                $("#bookInfoContainer").html(data).slideDown(); // Wstawia PartialView do kontenera
+            },
+            error: function () {
+                alert("Nie udało się załadować informacji o książce.");
+            }
+        });
+		}else{
+			container.slideToggle();
+		}
+    });
+});
+		
+				$(document).ready(function () {
 			$("#loadPublicationInfo").click(function () {
-				const publicationInfoPartial = $("#publicationInfoPartial");
-				if(publicationInfoPartial.is(":empty")){
-				$("#publicationInfoPartial").load("@Url.Action("AddPublishingInfo", "Book")");
-				}else {
-					publicationInfoPartial.empty();
+				let bookId = $(this).data("book-id");
+				bookId = document.getElementById('id').value;
+						console.log({bookId});
+				let containerInfo = $("#infoContainer");
+				if (containerInfo.is(":empty")){
+				$.ajax({
+					url: "/Book/GetInfoPartial", // URL akcji w kontrolerze
+					type: "GET",
+					data: { bookId: bookId },
+					success: function (data) {
+						$("#infoContainer").html(data).slideDown(); // Wstawia PartialView do kontenera
+					},
+					error: function () {
+						alert("Nie udało się załadować informacji publikacji o książce.");
+					}
+				});
+				}else{
+					containerInfo.slideToggle();
 				}
 			});
+		});			
 
 			$(document).on("click", ".addDetails-author", function(){
-
 				let authorItem = $(this).closest(".author-item");
 				let currentIndex = authorItem.index();
 				if (authorItem.find(".author-details").length===0) {
-
 						let addAuthorDetails = `<div class="author-details"">
-
 					<div class="form-group">
 						<label for="Authors[${currentIndex}].RealName" class="control-label">Prawdziwe Imię</label>
 						<input id="Authors[${currentIndex}].RealName" name="Authors[${currentIndex}].RealName" class="form-control" />
@@ -207,15 +221,20 @@
 						<span data-valmsg-for="Authors[${currentIndex}].DateOfBirth" class="text-danger"></span>
 					</div>
 						<button type="button" class="btn btn-secondary closeDetails-author" formnovalidate>Zamknij</button>
-
 			</div>`
 			authorItem.append(addAuthorDetails);
 			}
 		});
 		$(document).on("click", ".closeDetails-author", function(){
 			$(this).closest(".author-details").remove();
-
 		});
+		// 	//tu wklej
+		// 	$(document).on("submit", "#bookForm", function () {
+		// 	$("[data-info-field]").each(function () {
+		// 		let fieldName = $(this).attr("data-info-field"); // Pobieramy nazwę pola
+		// 		$("#BookInfo" + fieldName).val($(this).val()); // Kopiujemy wartość do ukrytego pola
+		// 	});
+		// });
 	</script>
 	@{
 		await Html.RenderPartialAsync("_ValidationScriptsPartial");

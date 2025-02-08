@@ -11,7 +11,7 @@ namespace MyLibraryMVC.Domain.Model
 		public int Id { get; set; }
 		public int? NumberOfPages { get; set; }
 		public int? NumberOfChapter { get; set; }
-		public bool? Illustration { get; set; }
+		public bool Illustration { get; set; }
 		public string? Binding { get; set; }
 		public string? Subtitle { get; set; }
 		public required int CategoryId { get; set; }

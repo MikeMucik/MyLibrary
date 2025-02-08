@@ -9,6 +9,8 @@ namespace MyLibraryMVC.Domain.Interfaces
 {
 	public interface ICityRepo
 	{
-		IEnumerable<City>  GetAllCity();
+		int AddCity(City city);
+		IEnumerable<City> GetAllCity();
+		int GetCityIdByName(string cityName);
 	}
 }

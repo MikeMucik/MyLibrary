@@ -9,6 +9,8 @@ namespace MyLibraryMVC.Domain.Interfaces
 {
 	public interface IHouseRepo
 	{
+		int AddHouse(House house);
 		IEnumerable<House> GetAllHouse();
+		int GetHouseIdByName(string houseName);
 	}
 }

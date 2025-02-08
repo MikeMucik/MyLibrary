@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MyLibraryMVC.Application.ViewModels.Book;
+using MyLibraryMVC.Application.ViewModels.BookInfo;
+using MyLibraryMVC.Application.ViewModels.Info;
 
 namespace MyLibraryMVC.Application.Interfaces
 {
@@ -16,5 +18,8 @@ namespace MyLibraryMVC.Application.Interfaces
 			int categoryId, int ageGroupId, int houseOfPublishing);
 		NewBookVm GetBookToEdit(int id);
 		int UpdateBook(NewBookVm model);
+		NewBookInfoVm GetBookInfoByBookId(int bookId);
+		NewInfoVm GetInfoByBookId(int bookId);
+		void DeleteBook(int id);
 	}
 }

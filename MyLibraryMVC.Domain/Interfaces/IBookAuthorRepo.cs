@@ -11,5 +11,6 @@ namespace MyLibraryMVC.Domain.Interfaces
 	{
 		//void AddAuthor(BookAuthor author);
 		void AddBookAuthor(BookAuthor bookAuthorBase);
+		void DeleteAuthors (int bookId);
 	}
 }

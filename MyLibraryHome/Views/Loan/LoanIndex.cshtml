@@ -1,0 +1,100 @@
+﻿@model MyLibraryMVC.Application.ViewModels.Loan.ListLoansVm
+
+@{
+	ViewData["Title"] = "LoanIndex";
+}
+
+<h1>Lista wypożyczeń</h1>
+
+<p>
+	<a asp-action="LoanAdd">Nowe wypożyczenie</a>
+</p>
+<div id="indexLoans">
+	<table class="table">
+		<thead>
+			<tr>
+				<th>
+					@Html.DisplayNameFor(model => model.Loans.First().Id)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.Loans.First().BookTitle)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.Loans.First().BookAuthor)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.Loans.First().IsLoan)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.Loans.First().UserName)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.Loans.First().UserId)
+				</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in Model.Loans)
+			{
+				<tr>
+					<td>
+						@Html.DisplayFor(modelItem => item.Id)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.BookTitle)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.BookAuthor)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.IsLoan)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.UserName)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.UserId)
+					</td>
+					<td>
+						@Html.ActionLink("Przedłużenie wypożyczenia", "LoanEdit", new { /* id=item.PrimaryKey */ }) |
+						@Html.ActionLink("Szczegóły wypożyczenia", "LoanDetails", new {  loanId=item.Id  }) |
+						@Html.ActionLink("Zwrot książki", "LoanDelete", new { /* id=item.PrimaryKey */ })
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+	<div class="row-md4">
+		<div class="pagination">
+			<table>
+				<tr>
+					@for (int i = 1; i <= Math.Ceiling(Model.TotalCount / (double)Model.PageSize); i++)
+					{
+						<td>
+							@if (i == Model.CurrentPage)
+							{
+								<span>@i</span>
+							}
+							else
+							{
+								<a href="javascript:PagerClick(@i)">@i</a>
+							}
+						</td>
+					}
+				</tr>
+			</table>
+			<input type="hidden" name="pageNumber" id="pageNumber" />
+			<input type="hidden" name="pageSize" id="pageSize" value="12" />
+		</div>
+	</div>
+</div>
+@section Scripts
+{
+	<script type="text/javascript">
+		function PagerClick(index){
+		document.getElementById("pageNumber").value = index;
+		document.getElementById("indexBooks").submit();
+		}
+	</script>
+}

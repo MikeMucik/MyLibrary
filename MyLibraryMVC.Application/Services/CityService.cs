@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using MyLibraryMVC.Application.Interfaces;
 using MyLibraryMVC.Application.ViewModels.City;
 using MyLibraryMVC.Domain.Interfaces;
+using MyLibraryMVC.Domain.Model;
 
 namespace MyLibraryMVC.Application.Services
 {
@@ -22,6 +23,21 @@ namespace MyLibraryMVC.Application.Services
 			_cityRepo = cityRepo;
 			_mapper = mapper;
 		}
+
+		public int AddCity(string cityName)
+		{
+			var checkCity = _cityRepo.GetCityIdByName(cityName);
+			if (checkCity == 0)
+			{
+				var city = new City
+				{
+					Name = cityName
+				};
+				var cityId = _cityRepo.AddCity(city);
+			}
+			return checkCity;
+		}
+
 		public List<SelectListItem> GetCitiesForSelectList()
 		{
 			var cities = _cityRepo.GetAllCity();

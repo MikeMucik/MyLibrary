@@ -65,6 +65,7 @@
 							@Html.ActionLink("Edutuj książkę", "BookEdit", new { id = item.Id })
 							@Html.ActionLink("Szczegóły książki", "BookDetails", new { id = item.Id })
 							@Html.ActionLink("Usuń książkę", "BookDelete", new { id = item.Id })
+							@Html.ActionLink("Wypożyczenie", "LoanAdd", "Loan", new { bookId = item.Id })
 						</td>
 					</tr>
 				}

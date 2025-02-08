@@ -15,9 +15,24 @@ namespace MyLibraryMVC.Infrastructure.Repositories
 		{
 			_context = context;
 		}
+
+		public int AddCity(City city)
+		{
+			_context.Cities.Add(city);
+			_context.SaveChanges();
+			return city.Id;
+		}
+
 		public IEnumerable<City> GetAllCity()
 		{
 			return _context.Cities.ToList();
+		}
+
+		public int GetCityIdByName(string cityName)
+		{
+			var existingCity = _context.Cities
+				.FirstOrDefault(c => c.Name.ToLower().Trim() == cityName.ToLower().Trim());
+			return existingCity?.Id ?? 0;
 		}
 	}
 }

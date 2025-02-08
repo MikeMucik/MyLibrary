@@ -7,14 +7,24 @@ using MyLibraryMVC.Application;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
+	?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+
 builder.Services.AddDbContext<Context>(options =>
 	options.UseSqlServer(connectionString));
+
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddDefaultIdentity<IdentityUser>(options 
+	=> options.SignIn.RequireConfirmedAccount = true)
 	.AddEntityFrameworkStores<Context>();
 builder.Services.AddControllersWithViews();
+
+//builder.Services.AddControllers()
+//	.AddJsonOptions(options =>
+//	{
+//		options.JsonSerializerOptions.PropertyNamingPolicy = null; // Zapobiega konwersji do camelCase
+//	});
 
 builder.Services.AddAplication();
 builder.Services.AddInfrastructure();
@@ -39,7 +49,7 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapStaticAssets();
-
+//app.MapControllers();
 app.MapControllerRoute(
 	name: "default",
 	pattern: "{controller=Home}/{action=Index}/{id?}")

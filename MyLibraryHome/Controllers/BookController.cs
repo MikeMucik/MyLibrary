@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using MyLibraryMVC.Application.Interfaces;
 using MyLibraryMVC.Application.ViewModels.Author;
 using MyLibraryMVC.Application.ViewModels.Book;
 using MyLibraryMVC.Application.ViewModels.BookInfo;
+using MyLibraryMVC.Domain.Interfaces;
+using MyLibraryMVC.Domain.Model;
 using Newtonsoft.Json;
 
 namespace MyLibraryHome.Controllers
@@ -16,6 +19,7 @@ namespace MyLibraryHome.Controllers
 		private readonly IHouseService _houseService;
 		private readonly ICityService _cityService;
 		private readonly IAuthorService _authorService;
+		//private readonly IBookRepo _bookRepo;
 		public BookController(
 			IBookService bookService,
 			ICategoryService categoryService,
@@ -23,7 +27,10 @@ namespace MyLibraryHome.Controllers
 			IBookInfoService bookInfoService,
 			IHouseService houseService,
 			ICityService cityService,
-			IAuthorService authorService)
+			IAuthorService authorService
+			//,
+			//IBookRepo bookRepo
+			)
 		{
 			_bookService = bookService;
 			_categoryService = categoryService;
@@ -32,6 +39,7 @@ namespace MyLibraryHome.Controllers
 			_houseService = houseService;
 			_cityService = cityService;
 			_authorService = authorService;
+			//_bookRepo = bookRepo;
 		}
 		[HttpGet]
 		public IActionResult BookIndex(int pageSize = 12, int pageNumber = 1, string searchString = "")
@@ -44,24 +52,7 @@ namespace MyLibraryHome.Controllers
 		{
 			var model = _bookService.GetBookDetails(id);
 			return View(model);
-		}
-		[HttpGet]
-		public IActionResult AddBook() 
-		{			
-			FillViewBags();			
-			return View(new NewBookVm());
-		}
-		[HttpPost]
-		public IActionResult AddBook(NewBookVm model)
-		{			
-			FillViewBags();
-			if (ModelState.IsValid)
-			{				
-				int bookId = _bookService.AddBook(model);
-				return RedirectToAction("BookDetails", new { id = bookId });
-			}
-			return View(model);
-		}	
+		}		
 		[HttpGet]
 		public IActionResult FindBook(int pageSize = 12, int pageNumber = 1,
 			int authorId= 0 ,int categoryId = 0, int ageGroupId = 0, int houseOfPublishingId = 0)
@@ -85,13 +76,31 @@ namespace MyLibraryHome.Controllers
 			FillViewBags();
 			return View(model);
 		}
+		
+		[HttpGet]
+		public IActionResult AddBook()
+		{
+			FillViewBags();
+			return View(new NewBookVm());
+		}
+		[HttpPost]
+		public IActionResult AddBook(NewBookVm model)
+		{
+			FillViewBags();
+			if (ModelState.IsValid)
+			{
+				int bookId = _bookService.AddBook(model);
+				return RedirectToAction("BookDetails", new { id = bookId });
+			}
+			return View(model);
+		}
 		[HttpGet]
 		public IActionResult BookEdit(int id)
 		{
 			FillViewBags();
 			var model = _bookService.GetBookToEdit(id);
-			Console.WriteLine(JsonConvert.SerializeObject(model.BookInfo, Formatting.Indented));
-
+			ViewBag.AuthorsSelect = _authorService.GetSelectedAuthors(model.Authors);
+			
 			return View(model);
 		}
 		[HttpPost]
@@ -105,11 +114,31 @@ namespace MyLibraryHome.Controllers
 			}
 			return View(model);
 		}
+		public IActionResult BookDelete(int id)
+		{
+			_bookService.DeleteBook(id);
+			return RedirectToAction("BookIndex");
+		}
 		[HttpGet]
 		public IActionResult AddBookInfo()
 		{
 			FillViewBags();
-			return PartialView("_AddBookInfo");
+			ViewData.TemplateInfo.HtmlFieldPrefix = "BookInfo";
+			return PartialView("AddBookInfo_model");
+		}
+		[HttpGet]
+		public IActionResult GetBookInfoPartial(int bookId)
+		{
+			FillViewBags();		
+			var bookInfo = _bookService.GetBookInfoByBookId(bookId); 
+			return PartialView("AddBookInfo_model", bookInfo);
+		}
+		[HttpGet]
+		public IActionResult GetInfoPartial(int bookId)
+		{
+			FillViewBags();
+			var info = _bookService.GetInfoByBookId(bookId);
+			return PartialView("AddPublishingInfo_model", info);
 		}
 		[HttpGet]
 		public IActionResult AddPublishingInfo()

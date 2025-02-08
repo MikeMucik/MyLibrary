@@ -20,6 +20,11 @@ namespace MyLibraryMVC.Application.Services
 		public void AddBookAuthor(BookAuthor bookAuthor)
 		{			
 			_bookAuthorRepo.AddBookAuthor(bookAuthor);
-		}		
+		}
+
+		public void DeleteAuthors(int id)
+		{
+			_bookAuthorRepo.DeleteAuthors(id);
+		}
 	}
 }

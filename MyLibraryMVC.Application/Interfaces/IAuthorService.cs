@@ -12,5 +12,6 @@ namespace MyLibraryMVC.Application.Interfaces
 	{
 		int GetOrAddAuthor(NewAuthorVm item);
 		List<SelectListItem> GetAuthorsForSelectList();
+		List<SelectListItem> GetSelectedAuthors(List<NewAuthorVm> bookAuthors);
 	}
 }

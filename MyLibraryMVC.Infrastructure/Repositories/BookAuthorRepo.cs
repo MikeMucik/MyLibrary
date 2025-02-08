@@ -21,6 +21,16 @@ namespace MyLibraryMVC.Infrastructure.Repositories
 			_context.BooksAuthor.Add(bookAuthorBase);
 			_context.SaveChanges();
 		}
+
+		public void DeleteAuthors(int bookId)
+		{
+			var entities = _context.BooksAuthor
+				.Where(x=> x.BookId == bookId)
+				.ToList();
+			_context.BooksAuthor.RemoveRange(entities);
+			_context.SaveChanges();
+				
+		}
 		//public void AddAuthor(BookAuthor author)
 		//{
 		//	_context.BooksAuthor.Add(author);

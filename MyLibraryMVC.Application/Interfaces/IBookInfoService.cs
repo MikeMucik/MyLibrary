@@ -12,5 +12,6 @@ namespace MyLibraryMVC.Application.Interfaces
 	public interface IBookInfoService
 	{
 		//int AddInfoBook(NewBookInfoVm model);
+		
 	}
 }

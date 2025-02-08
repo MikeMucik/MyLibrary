@@ -47,8 +47,20 @@ namespace MyLibraryMVC.Application.Services
 			return authorsVms.Select(c => new SelectListItem
 			{
 				Value = c.Id.ToString(),
+				Text = c.Name + " " + c.SurName}).ToList();
+		}
+		public List<SelectListItem> GetSelectedAuthors(List<NewAuthorVm> bookAuthors)
+		{
+			var authors = _authorRepo.GetAllAuthors();
+			var bookAuthorIds = bookAuthors.Select(a=>a.Id).ToList();
+			
+			var x = authors.Select(c => new SelectListItem
+			{
+				Value = c.Id.ToString(),
 				Text = c.Name + " " + c.SurName,
+				Selected = bookAuthorIds.Contains(c.Id)
 			}).ToList();
+			return x;
 		}
 	}
 }

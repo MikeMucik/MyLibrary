@@ -1,52 +1,44 @@
 ﻿@model MyLibraryMVC.Application.ViewModels.Info.NewInfoVm
 
-<h4>NewInfoVm</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="AddPublishingInfo">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Id" class="control-label"></label>
-                <input asp-for="Id" class="form-control" />
-                <span asp-validation-for="Id" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="YearOfPublication" class="control-label"></label>
-                <input asp-for="YearOfPublication" class="form-control" />
-                <span asp-validation-for="YearOfPublication" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PublishingHouseId" class="control-label"></label>
-                <input asp-for="PublishingHouseId" class="form-control" />
-                <span asp-validation-for="PublishingHouseId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="NumberOfPublishing" class="control-label"></label>
-                <input asp-for="NumberOfPublishing" class="form-control" />
-                <span asp-validation-for="NumberOfPublishing" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PublishingDate" class="control-label"></label>
-                <input asp-for="PublishingDate" class="form-control" />
-                <span asp-validation-for="PublishingDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CityOfPublishingId" class="control-label"></label>
-                <input asp-for="CityOfPublishingId" class="form-control" />
-                <span asp-validation-for="CityOfPublishingId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+<div class="form-group">
+	<input type="hidden" asp-for="Id" name="NewInfo.Id" class="form-control" />
 </div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
+<div class="form-group">
+	<label asp-for="YearOfPublication" class="control-label">Rok Publikacji</label>
+	<input asp-for="YearOfPublication" name="NewInfo.YearOfPublication" class="form-control" />
+	<span asp-validation-for="YearOfPublication" class="text-danger"></span>
 </div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+<div class="form-group">
+	<label asp-for="PublishingHouseId" class="control-label">Wydawnictwo</label>
+	<select asp-for="PublishingHouseId" name="NewInfo.PublishingHouseId" class="form-control" asp-items="ViewBag.Houses">
+		<option value="">Wybierz wydawnictwo z listy lub dodaj poniżej</option>
+	</select>	
+	<span asp-validation-for="PublishingHouseId" class="text-danger"></span>
+</div>
+<div class="form-group">
+	<label asp-for="PublishingHouseName" class="control-label">Wpisz wydawnictwo</label>
+	<input asp-for="PublishingHouseName" name="NewInfo.PublishingHouseName" class="form-control" />
+	<span asp-validation-for="PublishingHouseName" class="text-danger"></span>
+</div>
+<div class="form-group">
+	<label asp-for="NumberOfPublishing" class="control-label">Numer publikacji</label>
+	<input asp-for="NumberOfPublishing" name="NewInfo.NumberOfPublishing" class="form-control" />
+	<span asp-validation-for="NumberOfPublishing" class="text-danger"></span>
+</div>
+<div class="form-group">
+	<label asp-for="PublishingDate" class="control-label">Data Publikacji</label>
+	<input asp-for="PublishingDate" name="NewInfo.PublishingDate" class="form-control" />
+	<span asp-validation-for="PublishingDate" class="text-danger"></span>
+</div>
+<div class="form-group">
+	<label asp-for="CityOfPublishingId" class="control-label">Miasto publikacji</label>
+	<select asp-for="CityOfPublishingId" name="NewInfo.CityOfPublishingId" class="form-control" asp-items="ViewBag.Cities">
+		<option value="">Wybierz miasto publikacji z listy lub dodaj poniżej</option>
+	</select>
+	<span asp-validation-for="CityOfPublishingId" class="text-danger"></span>
+	<div class="form-group">
+		<label asp-for="CityOfPublishingName" class="control-label">Wpisz miasto</label>
+		<input asp-for="CityOfPublishingName" name="NewInfo.CityOfPublishingName" class="form-control" />
+		<span asp-validation-for="CityOfPublishingName" class="text-danger"></span>
+	</div>
+</div>

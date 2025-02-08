@@ -115,6 +115,7 @@
     </dl>
 </div>
 <div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    <a asp-action="Index">Back to List</a>
+    @Html.ActionLink("Edutuj książkę", "BookEdit", new { id = Model.Id })
+
+	<a asp-action="BookIndex">Back to List</a>
 </div>

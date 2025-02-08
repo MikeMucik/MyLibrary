@@ -10,5 +10,6 @@ namespace MyLibraryMVC.Application.Interfaces
 	public interface IBookAuthorService
 	{
 		void AddBookAuthor(BookAuthor bookAuthor);
+		void DeleteAuthors(int id);
 	}
 }

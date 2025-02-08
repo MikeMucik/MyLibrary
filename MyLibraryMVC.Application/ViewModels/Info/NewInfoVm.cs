@@ -10,7 +10,9 @@ using MyLibraryMVC.Domain.Model;
 
 namespace MyLibraryMVC.Application.ViewModels.Info
 {
-	public class NewInfoVm : IMapFrom<Domain.Model.Info>
+	public class NewInfoVm : IMapFrom<Domain.Model.Info>,
+							IMapFrom<Domain.Model.Book>
+		
 	{
 		public int? Id { get; set; }
 		public int? YearOfPublication { get; set; }
@@ -24,10 +26,10 @@ namespace MyLibraryMVC.Application.ViewModels.Info
 		public void Mapping(Profile profile)
 		{
 			profile.CreateMap<NewInfoVm, Domain.Model.Info>()
-				.ForPath(a => a.PublishingHouse.Name, b => b.MapFrom(c => c.PublishingHouseName))
-				.ForPath(a => a.CityOfPublishing.Name, b => b.MapFrom(c => c.CityOfPublishingName)).
-				ReverseMap();
-				;	
+				.ReverseMap();
+			profile.CreateMap<Domain.Model.Book, NewInfoVm>()
+				
+				.ReverseMap();
 		}
 	}
 }
