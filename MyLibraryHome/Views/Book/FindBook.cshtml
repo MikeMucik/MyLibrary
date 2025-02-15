@@ -27,8 +27,8 @@
 		</select>
 	</div>
 	<div class="row-md6">
-		<label for="houseOfPublishingId">Wybierz grupę wiekową:</label>
-		<select asp-for="HouseOfPublishingId" asp-items="ViewBag.AgeGroups">
+		<label for="houseOfPublishingId">Wybierz wydawnictwo:</label>
+		<select asp-for="HouseOfPublishingId" asp-items="ViewBag.Houses">
 			<option value="0">Wszystkie</option>
 		</select>
 	</div> 
@@ -84,7 +84,9 @@
 						<td>
 							@Html.ActionLink("Edutuj książkę", "BookEdit", new { id = item.Id })
 							@Html.ActionLink("Szczegóły książki", "BookDetails", new { id = item.Id })
-							@Html.ActionLink("Usuń książkę", "BookDelete", new { id = item.Id })
+							@Html.ActionLink("Usuń książkę", "BookDelete", new { id = item.Id },
+							new { onclick = "return confirm('Czy na pewno chcesz usunąć tę książkę?');", @class = "btn btn-danger" })
+							@Html.ActionLink("Wypożyczenie", "LoanAdd", "Loan", new { bookId = item.Id })
 						</td>
 					</tr>
 				}

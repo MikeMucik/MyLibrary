@@ -10,6 +10,7 @@ namespace MyLibraryMVC.Domain.Interfaces
 	public interface IBookRepo
 	{
 		int AddBook(Book newBook);
+		
 		void DeleteBook(int id);
 		IQueryable<Book> GetAllBooks();
 		//Book GetBookById(int id);

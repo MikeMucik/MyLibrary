@@ -16,14 +16,14 @@ namespace MyLibraryMVC.Application.ViewModels.Book
 		public required List<AuthorVm> Authors { get; set; } = new List<AuthorVm>();
 		public required string Category { get; set; }
 		public string? AgeGroup { get; set; }
-		public int NumberOfPages { get; set; }
-		public int NumberOfChapter { get; set; }
+		public int? NumberOfPages { get; set; }
+		public int? NumberOfChapter { get; set; }
 		public bool Illustration { get; set; }//
 		public string? Binding { get; set; }
-		public int YearOfPublication { get; set; }
+		public int? YearOfPublication { get; set; }
 		public string? PublishingHouse { get; set; }
 		public int? NumberOfPublishing { get; set; }
-		public DateOnly PublishingDate { get; set; }
+		public DateOnly? PublishingDate { get; set; }
 		public string? CityOfPublishing { get; set; }
 		public string? Description { get; set; }
 		public string? Subtitle { get; set; }

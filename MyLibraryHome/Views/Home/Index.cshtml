@@ -1,19 +1,34 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+	ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>
-        <a href="@Url.Action("BookIndex","Book")">Wykaz książek</a>
-    </p>
-    <p>
-        <a href="@Url.Action("AddBook","Book")">Dodaj książkę</a>
-    </p>
-    <p>
-        <a href="@Url.Action("FindBook","Book")">Wyszukaj książkę</a>
-    </p>
-    <p>
-        <a href="@Url.Action("LoanIndex","Loan")">Lista wypożyczeń książkę</a>
-    </p>
+	<h1 class="display-4">Witaj w domowej bibliotece</h1>
+	<p>
+		<a href="@Url.Action("BookIndex","Book")">Wykaz książek</a>
+	</p>
+	<p>
+		<a href="@Url.Action("AddBook","Book")">Dodaj książkę</a>
+	</p>
+	<p>
+		<a href="@Url.Action("FindBook","Book")">Wyszukaj książkę</a>
+	</p>
+	<p>
+		<a href="@Url.Action("LoanIndex","Loan")">Lista wypożyczeń książek</a>
+	</p>
+	<p>
+		<a href="@Url.Action("AuthorsInfo","OtherFunction")">Informacje o autorach</a>
+	</p>
+	@if (User.IsInRole("Admin"))
+	{
+		<p>
+			<a href="@Url.Action("AddCategory","OtherFunction")">Dodaj kategorię</a>
+		</p>
+		<p>
+			<a href="@Url.Action("ListCategory","OtherFunction")">Zobacz kategorię</a>
+		</p>
+		<p>
+			<a href="@Url.Action("ManageUsers", "OtherFunction")">Zarządzanie użytkownikami</a>
+		</p>
+	}
 </div>

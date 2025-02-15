@@ -9,6 +9,8 @@ namespace MyLibraryMVC.Domain.Interfaces
 {
 	public interface ICategoryRepo
 	{
+		void AddCategory(Category category);
+		void DeleteCategory(int id);
 		IEnumerable<Category> GetAllCategories();
 	}
 }

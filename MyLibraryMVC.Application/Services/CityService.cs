@@ -23,7 +23,6 @@ namespace MyLibraryMVC.Application.Services
 			_cityRepo = cityRepo;
 			_mapper = mapper;
 		}
-
 		public int AddCity(string cityName)
 		{
 			var checkCity = _cityRepo.GetCityIdByName(cityName);
@@ -37,7 +36,6 @@ namespace MyLibraryMVC.Application.Services
 			}
 			return checkCity;
 		}
-
 		public List<SelectListItem> GetCitiesForSelectList()
 		{
 			var cities = _cityRepo.GetAllCity();

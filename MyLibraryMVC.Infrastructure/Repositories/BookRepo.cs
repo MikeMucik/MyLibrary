@@ -16,32 +16,26 @@ namespace MyLibraryMVC.Infrastructure.Repositories
 		{
 			_context = context;
 		}
-
 		public int AddBook(Book newBook)
 		{
 			_context.Books.Add(newBook);
 			_context.SaveChanges();
 			return newBook.Id;
 		}
-
 		public void DeleteBook(int id)
 		{
 			var book = _context.Books.Find(id);
 			_context.Books.Remove(book);
 			_context.SaveChanges();
 		}
-
 		public IQueryable<Book> GetAllBooks()
 		{
 			return _context.Books;
 		}
-
 		//public object GetBookById(int id)
 		//{
 		//	var book = _context.Books
-
 		//}
-
 		public Book GetBookDetails(int id)
 		{
 			var book = _context.Books
@@ -58,7 +52,6 @@ namespace MyLibraryMVC.Infrastructure.Repositories
 				.FirstOrDefault(b => b.Id == id);
 			return book;
 		}
-
 		public IQueryable<Book> GetBooksByDetais(int authorId, int categoryId, int ageGroupId, int houseOfPublishingId)
 		{
 			var books = _context.Books
@@ -71,7 +64,6 @@ namespace MyLibraryMVC.Infrastructure.Repositories
 		.Include(b => b.PublishingInfo)
 		.ThenInclude(bi => bi.PublishingHouse)
 		.AsQueryable();
-
 			if (authorId > 0)
 			{
 				books = books.Where(b => b.BookAuthors.Any(ba => ba.AuthorId == authorId));
@@ -90,7 +82,6 @@ namespace MyLibraryMVC.Infrastructure.Repositories
 			}
 			return books;
 		}
-
 		public void UpdateBook(Book book)
 		{
 			_context.Attach(book);
@@ -116,7 +107,6 @@ namespace MyLibraryMVC.Infrastructure.Repositories
 				_context.Entry(book.PublishingInfo).Property(nameof(book.PublishingInfo.YearOfPublication)).IsModified = true;
 			}
 			_context.SaveChanges();
-
 		}
 	}
 }

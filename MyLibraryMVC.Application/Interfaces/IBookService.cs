@@ -21,5 +21,6 @@ namespace MyLibraryMVC.Application.Interfaces
 		NewBookInfoVm GetBookInfoByBookId(int bookId);
 		NewInfoVm GetInfoByBookId(int bookId);
 		void DeleteBook(int id);
+		
 	}
 }

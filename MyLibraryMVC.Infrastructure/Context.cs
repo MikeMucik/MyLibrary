@@ -9,8 +9,12 @@ using MyLibraryMVC.Domain.Model;
 
 namespace MyLibraryMVC.Infrastructure
 {
-	public class Context(DbContextOptions options) : IdentityDbContext(options)
+	public class Context: IdentityDbContext<ApplicationUser>
 	{
+		public Context(DbContextOptions<Context> options) : base(options)
+		{
+
+		}
 		public DbSet<AgeGroup> AgeGroups { get; set; }
 		public DbSet<Author> Authors { get; set; }
 		public DbSet<Book> Books { get; set; }
@@ -21,6 +25,7 @@ namespace MyLibraryMVC.Infrastructure
 		public DbSet<House> PublishingHouses { get; set; }
 		public DbSet<Info> PublishingInfo { get; set; }
 		public DbSet<Loan> Loans { get; set; }
+		
 
 		protected override void OnModelCreating(ModelBuilder builder)
 		{
@@ -50,7 +55,7 @@ namespace MyLibraryMVC.Infrastructure
 			builder.Entity<Loan>()
 				.HasOne<ApplicationUser>()
 				.WithMany()
-				.HasForeignKey(l => l.UserID);
+				.HasForeignKey(l => l.UserId);
 				//.OnDelete(DeleteBehavior.Cascade);	
 		}
 

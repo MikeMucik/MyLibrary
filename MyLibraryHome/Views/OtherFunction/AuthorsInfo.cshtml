@@ -1,0 +1,81 @@
+﻿@model MyLibraryMVC.Application.ViewModels.Author.AuthorsListVm
+
+@{
+	ViewData["Title"] = "AuthorsInfo";
+}
+
+<h1>AuthorsInfo</h1>
+
+<p>
+	<a asp-action="AddAuthor">Dodaj nowego autora</a>
+</p>
+<form asp-action="AuthorsInfo" asp-controller="OtherFunction" , method="get" , id="authorsInfo">
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Imię/Pseudo</th>
+				<th>Nazwisko/Pseudo</th>
+				<th>Prawdziwe Imię</th>
+				<th>Prawdziwe Nazwisko</th>
+				<th>Miejsce urodzenia</th>
+				<th>Data urodzenia</th>
+				<th>Data śmierci</th>
+				<th>Język twórczości</th>
+				<th>Narodowość</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in Model.AuthorList)
+			{
+				<tr>
+					<td>@Html.DisplayFor(model => item.Name)</td>
+					<td>@Html.DisplayFor(model => item.SurName)</td>
+					<td>@Html.DisplayFor(model => item.RealName)</td>
+					<td>@Html.DisplayFor(model => item.RealSurName)</td>
+					<td>@Html.DisplayFor(model => item.PlaceOfBirth)</td>
+					<td>@Html.DisplayFor(model => item.DateOfBirth)</td>
+					<td>@Html.DisplayFor(model => item.DateOfDeath)</td>
+					<td>@Html.DisplayFor(model => item.Language)</td>
+					<td>@Html.DisplayFor(model => item.Nationality)</td>
+					<td>
+						@Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+						@Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+						@Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+	<div class="row-md4">
+		<div class="pagination">
+			<table>
+				<tr>
+					@for (int i = 1; i <= Math.Ceiling(Model.TotalCount / (double)Model.PageSize); i++)
+					{
+						<td>
+							@if (i == Model.CurrentPage)
+							{
+								<span>@i</span>
+							}
+							else
+							{
+								<a href="javascript:PagerClick(@i)">@i</a>
+							}
+						</td>
+					}
+				</tr>
+			</table>
+			<input type="hidden" name="pageNumber" id="pageNumber" />
+			<input type="hidden" name="pageSize" id="pageSize" value="12" />
+		</div>
+	</div>
+</form>
+@section Scripts
+{
+	<script type="text/javascript">
+		function PagerClick(index){
+		document.getElementById("pageNumber").value = index;
+		document.getElementById("authorsInfo").submit();
+		}
+	</script>
+}

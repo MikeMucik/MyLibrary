@@ -8,8 +8,7 @@ using MyLibraryMVC.Application.Mapping;
 
 namespace MyLibraryMVC.Application.ViewModels.Author
 {
-	public class AuthorVm :
-							IMapFrom<Domain.Model.BookAuthor>,
+	public class AuthorVm :	IMapFrom<Domain.Model.BookAuthor>,
 							IMapFrom<Domain.Model.Author>
 	{
 		public int? Id { get; set; }

@@ -18,11 +18,11 @@ namespace MyLibraryMVC.Application.ViewModels.Author
 		public string? RealName { get; set; }
 		public string? RealSurName { get; set; }
 		public DateOnly? DateOfBirth { get; set; }
-		
-		//public DateOnly? DateOfDeath { get; set; }
-		//public string PlaceOfBirth { get; set; }
-		//public string Nationality { get; set; }
-		//public string Language { get; set; }
+
+		public DateOnly? DateOfDeath { get; set; }
+		public string? PlaceOfBirth { get; set; }
+		public string? Nationality { get; set; }
+		public string? Language { get; set; }
 
 		public void Mapping(Profile profile)
 		{

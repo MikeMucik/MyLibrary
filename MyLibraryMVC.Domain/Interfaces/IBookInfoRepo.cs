@@ -10,5 +10,6 @@ namespace MyLibraryMVC.Domain.Interfaces
 	public interface IBookInfoRepo
 	{
 		//int AddBookInfo(BookInfo newBookInfo);
+		void ChangeIsAvailable(int bookId, bool checkedLoan);
 	}
 }

@@ -7,7 +7,9 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using MyLibraryMVC.Application.Interfaces;
 using MyLibraryMVC.Application.ViewModels.Castegory;
+using MyLibraryMVC.Application.ViewModels.Category;
 using MyLibraryMVC.Domain.Interfaces;
+using MyLibraryMVC.Domain.Model;
 
 namespace MyLibraryMVC.Application.Services
 {
@@ -20,8 +22,27 @@ namespace MyLibraryMVC.Application.Services
 		{
 			_categoryRepo = categoryRepo;
 			_mapper = mapper;
-		}	
-
+		}
+		public void AddCategory(NewCategoryVm category)
+		{
+			var categoryBase = _mapper.Map<Category>(category);
+			_categoryRepo.AddCategory(categoryBase);
+		}
+		public void DeleteCategory(int id)
+		{
+			_categoryRepo.DeleteCategory(id);
+		}
+		public ListCategoryVm GetAllCategory()
+		{
+			var categories = _categoryRepo.GetAllCategories()
+							.Select(x => _mapper.Map<CategoryForListVm>(x))
+							.ToList();
+			var categoriesList = new ListCategoryVm
+			{
+				Categories = categories,
+			};
+			return categoriesList;
+		}
 		public List<SelectListItem> GetCategoryForSelectList()
 		{
 			var categories = _categoryRepo.GetAllCategories();

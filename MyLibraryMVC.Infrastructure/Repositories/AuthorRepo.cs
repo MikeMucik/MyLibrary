@@ -22,10 +22,20 @@ namespace MyLibraryMVC.Infrastructure.Repositories
 			_context.SaveChanges();
 			return author.Id;
 		}
+
+		public int GetAuthorIdByName(string? name, string? surName)
+		{
+			var existingAuthor = _context.Authors
+				.FirstOrDefault(a=>a.Name.ToLower().Trim() == name.ToLower().Trim() &&
+				a.SurName.ToLower().Trim() == surName.ToLower().Trim());
+			return existingAuthor?.Id ?? 0;
+		}
+
 		public IEnumerable<Author> GetAllAuthors()
 		{
 			return _context.Authors.ToList();
 		}
+
 		//public Author GetAuthorById(int id)
 		//{
 		//	return _context.Authors.FirstOrDefault(x=>x.Id == id);

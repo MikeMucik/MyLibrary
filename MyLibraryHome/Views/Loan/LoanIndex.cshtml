@@ -9,7 +9,7 @@
 <p>
 	<a asp-action="LoanAdd">Nowe wypożyczenie</a>
 </p>
-<div id="indexLoans">
+<form asp-action="LoanIndex" asp-controller="Loan" method="get" id="indexLoan">
 	<table class="table">
 		<thead>
 			<tr>
@@ -17,20 +17,24 @@
 					@Html.DisplayNameFor(model => model.Loans.First().Id)
 				</th>
 				<th>
-					@Html.DisplayNameFor(model => model.Loans.First().BookTitle)
+					Tytuł
+					@* 	@Html.DisplayNameFor(model => model.Loans.First().BookTitle) *@
 				</th>
 				<th>
-					@Html.DisplayNameFor(model => model.Loans.First().BookAuthor)
+					Autorzy
+					@* 	@Html.DisplayNameFor(model => model.Loans.First().BookAuthor) *@
 				</th>
 				<th>
-					@Html.DisplayNameFor(model => model.Loans.First().IsLoan)
+					Czy wypożyczona
+					@* 	@Html.DisplayNameFor(model => model.Loans.First().IsLoan) *@
 				</th>
 				<th>
-					@Html.DisplayNameFor(model => model.Loans.First().UserName)
+					Nazwa użytkownika
+					@* 	@Html.DisplayNameFor(model => model.Loans.First().UserName) *@
 				</th>
-				<th>
+				@* <th>
 					@Html.DisplayNameFor(model => model.Loans.First().UserId)
-				</th>
+				</th> *@
 				<th></th>
 			</tr>
 		</thead>
@@ -53,13 +57,13 @@
 					<td>
 						@Html.DisplayFor(modelItem => item.UserName)
 					</td>
-					<td>
+					@* <td>
 						@Html.DisplayFor(modelItem => item.UserId)
-					</td>
+					</td> *@
 					<td>
-						@Html.ActionLink("Przedłużenie wypożyczenia", "LoanEdit", new { /* id=item.PrimaryKey */ }) |
-						@Html.ActionLink("Szczegóły wypożyczenia", "LoanDetails", new {  loanId=item.Id  }) |
-						@Html.ActionLink("Zwrot książki", "LoanDelete", new { /* id=item.PrimaryKey */ })
+						@Html.ActionLink("Przedłużenie wypożyczenia", "LoanEdit", new { id = item.Id }) |
+						@Html.ActionLink("Szczegóły wypożyczenia", "LoanDetails", new { loanId = item.Id }) |
+						@Html.ActionLink("Zwrot książki", "LoanDelete", new { id = item.Id })
 					</td>
 				</tr>
 			}
@@ -88,13 +92,13 @@
 			<input type="hidden" name="pageSize" id="pageSize" value="12" />
 		</div>
 	</div>
-</div>
+</form>
 @section Scripts
 {
 	<script type="text/javascript">
 		function PagerClick(index){
 		document.getElementById("pageNumber").value = index;
-		document.getElementById("indexBooks").submit();
+		document.getElementById("indexLoan").submit();
 		}
 	</script>
 }

@@ -11,6 +11,7 @@ namespace MyLibraryMVC.Application.ViewModels.Loan
 	public class LoanDetailsVm :IMapFrom<Domain.Model.Loan>
 	{
 		public int Id { get; set; }
+		public int BookId { get; set; }
 		public string BookTitle { get; set; }
 		public string BookAuthor { get; set; }
 		public string UserId { get; set; }
@@ -20,7 +21,7 @@ namespace MyLibraryMVC.Application.ViewModels.Loan
 		public void Mapping(Profile profile)
 		{
 			profile.CreateMap<Domain.Model.Loan, LoanDetailsVm>()
-				.ForMember(dest => dest.UserId, opt => opt.MapFrom(l => l.UserID))
+				//.ForMember(dest => dest.UserId, opt => opt.MapFrom(l => l.UserId))//
 				.ForMember(dest => dest.BookTitle, opt => opt.MapFrom(l => l.Book.Title))
 				.ForMember(dest => dest.BookAuthor, opt => opt.MapFrom(l =>	string.Join(", ", 
 				l.Book.BookAuthors.Select(la=>la.Author.Name + " " + la.Author.SurName))));

@@ -50,6 +50,7 @@ namespace MyLibraryHome.Controllers
 		[HttpGet]
 		public IActionResult BookDetails(int id)
 		{
+			
 			var model = _bookService.GetBookDetails(id);
 			return View(model);
 		}		

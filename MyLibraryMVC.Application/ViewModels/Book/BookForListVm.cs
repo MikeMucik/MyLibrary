@@ -18,6 +18,7 @@ namespace MyLibraryMVC.Application.ViewModels.Book
 		public required string Category { get; set; }
 		public string? AgeGroup { get; set; }
 		public required bool IsLoan { get; set;}//
+		
 		public void Mapping(Profile profile)
 		{
 			profile.CreateMap<Domain.Model.Book, BookForListVm>()
@@ -25,7 +26,9 @@ namespace MyLibraryMVC.Application.ViewModels.Book
 				.ForMember(b=>b.Authors, opt => opt.MapFrom(a=>a.BookAuthors))
 				.ForMember(b=>b.Category, opt=>opt.MapFrom(a=>a.BookInfo.Category.Name))
 				.ForMember(b=>b.AgeGroup, opt=>opt.MapFrom(a=>a.BookInfo.AgeGroup.Name))
-				.ForMember(b=>b.IsLoan, opt=>opt.MapFrom(a=>a.BookInfo.IsLoan));
+				//.ForMember(b=>b.IsLoan, opt=>opt.MapFrom(a=>a.BookInfo.IsLoan))
+				.ForMember(b=>b.IsLoan, opt=>opt.Ignore())
+				;
 		}
 	}
 }

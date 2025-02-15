@@ -11,7 +11,7 @@ namespace MyLibraryMVC.Application.Interfaces
 {
 	public interface IBookInfoService
 	{
-		//int AddInfoBook(NewBookInfoVm model);
-		
+		void ChangeIsAvailable(int bookId, bool checkedLoan);
+
 	}
 }

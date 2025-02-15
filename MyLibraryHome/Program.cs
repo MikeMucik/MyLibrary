@@ -1,8 +1,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using MyLibraryHome.Data;
 using MyLibraryMVC.Infrastructure;
 using MyLibraryMVC.Application;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using MyLibraryMVC.Application.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,15 +11,24 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
 	?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
-builder.Services.AddDbContext<Context>(options =>
+builder.Services.AddDbContext<MyLibraryMVC.Infrastructure.Context>(options =>
 	options.UseSqlServer(connectionString));
+builder.Services.AddSingleton<IEmailSender, FakeEmailSender>();
+
+//builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<Context>();
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options 
+builder.Services.AddDefaultIdentity<ApplicationUser>(options
 	=> options.SignIn.RequireConfirmedAccount = true)
-	.AddEntityFrameworkStores<Context>();
-builder.Services.AddControllersWithViews();
+	.AddRoles<IdentityRole>()
+	.AddEntityFrameworkStores<MyLibraryMVC.Infrastructure.Context>()
+	.AddDefaultTokenProviders();
+
+
+//builder.Services.AddControllersWithViews();
+builder.Services.AddRazorPages()
+	;
 
 //builder.Services.AddControllers()
 //	.AddJsonOptions(options =>
@@ -45,6 +55,8 @@ else
 
 app.UseHttpsRedirection();
 app.UseRouting();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

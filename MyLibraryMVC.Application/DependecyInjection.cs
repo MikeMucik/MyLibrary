@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using MyLibraryMVC.Application.Interfaces;
 using MyLibraryMVC.Application.Mapping;
@@ -24,7 +25,7 @@ namespace MyLibraryMVC.Application
 			services.AddTransient<ICityService, CityService>();
 			services.AddTransient<IHouseService, HouseService>();
 			services.AddTransient<IInfoservice, InfoService>();
-			services.AddTransient<ILoanService, LoanService>();
+			services.AddTransient<ILoanService, LoanService>();			
 			services.AddAutoMapper(Assembly.GetExecutingAssembly());
 			return services;
 		}

@@ -22,13 +22,16 @@ namespace MyLibraryMVC.Application.Services
 		private readonly IAuthorService _authorService;
 		private readonly IBookAuthorService _bookAuthorService;
 		private readonly ICityService _cityService;
-		private readonly IHouseService _houseService;
+		private readonly IHouseService _houseService;	
+		private readonly ILoanRepo _loanRepo;		
 		public BookService(IBookRepo bookRepo,
 			IMapper mapper,
 			IAuthorService authorService,
 			IBookAuthorService bookAuthorService,
 			ICityService cityService,
-			IHouseService houseService)
+			IHouseService houseService,
+			ILoanRepo loanRepo			
+			)
 		{
 			_bookRepo = bookRepo;
 			_mapper = mapper;
@@ -36,10 +39,10 @@ namespace MyLibraryMVC.Application.Services
 			_bookAuthorService = bookAuthorService;
 			_cityService = cityService;
 			_houseService = houseService;
-		}
-	
+			_loanRepo = loanRepo;			
+		}	
 		public ListBooksVm GetAllBooks(int pageSize, int pageNumber, string searchString)
-		{
+		{			
 			var books = _bookRepo.GetAllBooks()
 				.OrderBy(x => x.Title)
 				.Where(x => x.Title.StartsWith(searchString))
@@ -49,6 +52,11 @@ namespace MyLibraryMVC.Application.Services
 				.Skip(pageSize * (pageNumber - 1))
 				.Take(pageSize)
 				.ToList();
+			foreach (var item in booksToShow)// tu musi być funkcja sprawdzająca i ustalająca czy książka jest dostępna
+			{
+				var today = DateTime.Today;
+				item.IsLoan = _loanRepo.CheckLoan(item.Id, today);
+			}
 			var booksList = new ListBooksVm()
 			{
 				Books = booksToShow,
@@ -91,11 +99,13 @@ namespace MyLibraryMVC.Application.Services
 		public int AddBook(NewBookVm model)
 		{
 			if(model.NewInfo != null) { 
-			if (model.NewInfo.CityOfPublishingId == null || model.NewInfo.CityOfPublishingId == 0)
+			if ((model.NewInfo.CityOfPublishingId == null || model.NewInfo.CityOfPublishingId == 0) 
+					&& model.NewInfo.CityOfPublishingName != null)
 			{					
 					model.NewInfo.CityOfPublishingId = _cityService.AddCity(model.NewInfo.CityOfPublishingName);
 			}
-			if(model.NewInfo.PublishingHouseId == null || model.NewInfo.PublishingHouseId ==0)
+			if((model.NewInfo.PublishingHouseId == null || model.NewInfo.PublishingHouseId ==0) 
+					&& model.NewInfo.PublishingHouseName != null) 
 				{					
 					model.NewInfo.PublishingHouseId = _houseService.AddHouse(model.NewInfo.PublishingHouseName);
 				}
@@ -114,19 +124,20 @@ namespace MyLibraryMVC.Application.Services
 		{
 			var  book = _bookRepo.GetBookDetails(id);
 			var bookVm = _mapper.Map<NewBookVm>(book);
-			var bookAuthorsIds = bookVm.Authors.Select(a=>a.Id).ToList();
-			//bookVm.Authors = _authorService.GetAuthorsForSelectList(bookAuthorsIds);
+			var bookAuthorsIds = bookVm.Authors.Select(a=>a.Id).ToList();			
 			return bookVm;
 		}
 		public int UpdateBook(NewBookVm model)
 		{
 			if (model.NewInfo != null)
 			{
-				if (model.NewInfo.CityOfPublishingId == null || model.NewInfo.CityOfPublishingId == 0)
+				if ((model.NewInfo.CityOfPublishingId == null || model.NewInfo.CityOfPublishingId == 0) 
+					&& model.NewInfo.CityOfPublishingName != null)
 				{
 					model.NewInfo.CityOfPublishingId = _cityService.AddCity(model.NewInfo.CityOfPublishingName);
 				}
-				if (model.NewInfo.PublishingHouseId == null || model.NewInfo.PublishingHouseId == 0)
+				if ((model.NewInfo.PublishingHouseId == null || model.NewInfo.PublishingHouseId == 0)
+					&& model.NewInfo.PublishingHouseName != null) 
 				{
 					model.NewInfo.PublishingHouseId = _houseService.AddHouse(model.NewInfo.PublishingHouseName);
 				}
@@ -142,7 +153,6 @@ namespace MyLibraryMVC.Application.Services
 			_bookRepo.UpdateBook(book);
 			return model.Id;
 		}
-
 		public NewBookInfoVm GetBookInfoByBookId(int bookId)
 		{
 			var book = _bookRepo.GetBookDetails(bookId);
@@ -157,7 +167,6 @@ namespace MyLibraryMVC.Application.Services
 				AgeGroupId = book.BookInfo.AgeGroupId
 			};
 		}
-
 		public NewInfoVm GetInfoByBookId(int bookId)
 		{
 			var info = _bookRepo.GetBookDetails(bookId);
@@ -171,11 +180,9 @@ namespace MyLibraryMVC.Application.Services
 				CityOfPublishingId = info.PublishingInfo.CityOfPublishingId
 			};
 		}
-
-
 		public void DeleteBook(int id)
 		{
 			_bookRepo.DeleteBook(id);
-		}
+		}		
 	}
 }

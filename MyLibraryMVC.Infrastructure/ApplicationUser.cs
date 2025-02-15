@@ -10,7 +10,7 @@ namespace MyLibraryMVC.Infrastructure
 {
 	public class ApplicationUser : IdentityUser
 	{
-		public required string Name { get; set; }
-		public required string SurName { get; set; }
+		public string? Name { get; set; }
+		public string? SurName { get; set; }
 	}
 }

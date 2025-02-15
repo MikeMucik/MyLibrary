@@ -1,0 +1,70 @@
+﻿@model MyLibraryMVC.Application.ViewModels.Loan.BookToLoanVm
+
+@{
+    ViewData["Title"] = "LoanEdit";
+}
+
+<h1>Edycja Wypożyczenia</h1>
+
+<h4>Dane wypożyczenia</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="LoanEdit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                
+                <input asp-for="Id" type="hidden" class="form-control" />
+                
+            </div>
+            <div class="form-group">
+                
+                <input asp-for="BookId" type="hidden" class="form-control" />
+               
+            </div>
+            <div class="form-group">
+                <label asp-for="BookTitle" class="control-label">Tytuł książki</label>
+                <input asp-for="BookTitle" class="form-control" />
+                <span asp-validation-for="BookTitle" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BookAuthor" class="control-label">Autorzy</label>
+                <input asp-for="BookAuthor" class="form-control" />
+                <span asp-validation-for="BookAuthor" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                
+                <input asp-for="UserId" type="hidden" class="form-control" />
+                
+            </div>
+            <div class="form-group">
+                <label asp-for="UserName" class="control-label">Nazwa użytkownika</label>
+                <input asp-for="UserName" class="form-control" />
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LoanDate" class="control-label">Data wypożyczniea</label>
+                <input asp-for="LoanDate" class="form-control" />
+                <span asp-validation-for="LoanDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ReturnDate" class="control-label">Data zwrotu</label>
+                <input asp-for="ReturnDate" class="form-control" />
+                <span asp-validation-for="ReturnDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Zapisz wypożyczenie" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    @Html.ActionLink("Idź do listy książek", "BookIndex", "Book")|
+    @Html.ActionLink("Wróć do listy wypożyczeń książki", "BookLoans", new { BookId = Model.BookId })
+
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

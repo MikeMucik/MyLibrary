@@ -17,15 +17,19 @@ namespace MyLibraryMVC.Application.ViewModels.Loan
 		public bool IsLoan { get; set; }
 		public string UserId { get; set; }
 		public string UserName { get; set; }
+		public DateTime LoanDate { get; set; }
+		public DateTime ReturnDate { get; set; }
+
 		public void Mapping(Profile profile)
 		{
 			profile.CreateMap<Domain.Model.Loan, LoanBookToListVm>()
 				.ForMember(b=>b.IsLoan, opt=>opt.MapFrom(a=>a.Book.BookInfo.IsLoan))
 				.ForMember(b=>b.BookTitle, opt=>opt.MapFrom(a=>a.Book.Title))
-				.ForMember(b=>b.UserId, opt=>opt.MapFrom(a=>a.UserID))
-				.ForMember(b=>b.BookAuthor, opt=>opt.MapFrom(
-					a=>a.Book.BookAuthors.First().Author.Name +" "+ a.Book.BookAuthors.First().Author.SurName));
-
+				.ForMember(b=>b.UserId, opt=>opt.MapFrom(a=>a.UserId))	
+				.ForMember(b=>b.LoanDate, opt=>opt.MapFrom(a=>a.LoanDate))
+				.ForMember(b=>b.ReturnDate, opt=>opt.MapFrom(a=>a.ReturnDate))
+				.ForMember(dest => dest.BookAuthor, opt => opt.MapFrom(l => string.Join(", ",
+				l.Book.BookAuthors.Select(la => la.Author.Name + " " + la.Author.SurName))));
 		}
 	}
 }

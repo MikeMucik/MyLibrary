@@ -22,12 +22,10 @@ namespace MyLibraryMVC.Infrastructure.Repositories
 			_context.SaveChanges();
 			return city.Id;
 		}
-
 		public IEnumerable<City> GetAllCity()
 		{
 			return _context.Cities.ToList();
 		}
-
 		public int GetCityIdByName(string cityName)
 		{
 			var existingCity = _context.Cities

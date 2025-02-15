@@ -20,8 +20,15 @@ namespace MyLibraryMVC.Application.ViewModels.Loan
 		public DateTime ReturnDate { get; set; }
 		public void Mapping(Profile profile)
 		{
-			profile.CreateMap<BookToLoanVm, Domain.Model.Loan>()
-				.ForMember(dest=> dest.UserID, opt=>opt.MapFrom(l=>l.UserId));
+			profile.CreateMap<BookToLoanVm, Domain.Model.Loan>();
+
+			profile.CreateMap<Domain.Model.Loan, BookToLoanVm>()				
+				.ForMember(b => b.BookTitle, opt => opt.MapFrom(a => a.Book.Title))
+				.ForMember(b => b.UserId, opt => opt.MapFrom(a => a.UserId))
+				.ForMember(b => b.LoanDate, opt => opt.MapFrom(a => a.LoanDate))
+				.ForMember(b => b.ReturnDate, opt => opt.MapFrom(a => a.ReturnDate))
+				.ForMember(dest => dest.BookAuthor, opt => opt.MapFrom(l => string.Join(", ",
+				l.Book.BookAuthors.Select(la => la.Author.Name + " " + la.Author.SurName))));
 		}
 	}
 }

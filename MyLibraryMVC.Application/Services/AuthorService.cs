@@ -27,9 +27,17 @@ namespace MyLibraryMVC.Application.Services
 
 			if (item.Id == null)
 			{
-				var itemBase = _mapper.Map<Author>(item);
-				var authorId = _authorRepo.AddAuthor(itemBase);
-				return authorId;
+				var authorExist = _authorRepo.GetAuthorIdByName(item.Name, item.SurName);
+				if (authorExist != 0)
+				{
+					return authorExist;
+				}
+				else
+				{
+					var itemBase = _mapper.Map<Author>(item);
+					var authorId = _authorRepo.AddAuthor(itemBase);
+					return authorId;
+				}
 			}
 			if (item.Id > 0)
 			{
@@ -52,15 +60,35 @@ namespace MyLibraryMVC.Application.Services
 		public List<SelectListItem> GetSelectedAuthors(List<NewAuthorVm> bookAuthors)
 		{
 			var authors = _authorRepo.GetAllAuthors();
-			var bookAuthorIds = bookAuthors.Select(a=>a.Id).ToList();
-			
-			var x = authors.Select(c => new SelectListItem
+			var bookAuthorIds = bookAuthors.Select(a=>a.Id).ToList();			
+			var selectListAuthors = authors.Select(c => new SelectListItem
 			{
 				Value = c.Id.ToString(),
 				Text = c.Name + " " + c.SurName,
 				Selected = bookAuthorIds.Contains(c.Id)
 			}).ToList();
-			return x;
+			return selectListAuthors;
+		}
+
+		public AuthorsListVm GetAllAuthors(int pageSize, int pageNumber)
+		{
+			var authors = _authorRepo.GetAllAuthors()
+				.Select(x=>_mapper.Map<AuthorForDetailsList>(x))
+				.ToList();
+			var authorsToShow = authors
+				.Skip(pageSize*(pageNumber-1))
+				.Take(pageSize)
+				.ToList();
+
+			var authorList = new AuthorsListVm
+			{
+				AuthorList = authorsToShow,
+				CurrentPage = pageNumber,
+				PageSize= pageSize,
+				TotalCount = authors.Count
+				
+			};
+			return authorList;
 		}
 	}
 }

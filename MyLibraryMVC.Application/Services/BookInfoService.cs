@@ -8,24 +8,31 @@ using MyLibraryMVC.Application.Interfaces;
 using MyLibraryMVC.Application.ViewModels.BookInfo;
 using MyLibraryMVC.Domain.Interfaces;
 using MyLibraryMVC.Domain.Model;
+using MyLibraryMVC.Infrastructure.Repositories;
 
 namespace MyLibraryMVC.Application.Services
 {
 	public class BookInfoService : IBookInfoService
 	{
-		//private readonly IBookInfoRepo _bookInfoRepo;
+		private readonly IBookInfoRepo _bookInfoRepo;
 		//private readonly IMapper _mapper;
-		//public BookInfoService(IBookInfoRepo bookInfoRepo,
-		//				IMapper mapper)
-		//{
-		//	_bookInfoRepo = bookInfoRepo;
+		public BookInfoService(IBookInfoRepo bookInfoRepo
+			//,
+		//				IMapper mapper
+						)
+	{
+			_bookInfoRepo = bookInfoRepo;
 		//	_mapper = mapper;
-		//}
+		}
 		//public int AddInfoBook(NewBookInfoVm model)
 		//{
 		//	var newBookInfo = _mapper.Map<BookInfo>(model);
 		//	var toAddedBookInfo = _bookInfoRepo.AddBookInfo(newBookInfo);
 		//	return toAddedBookInfo;
 		//}
+		public void ChangeIsAvailable(int bookId, bool checkedLoan)
+		{
+			_bookInfoRepo.ChangeIsAvailable(bookId, checkedLoan);
+		}
 	}
 }

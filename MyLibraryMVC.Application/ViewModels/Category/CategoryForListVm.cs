@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using MyLibraryMVC.Application.Mapping;
 
-namespace MyLibraryMVC.Application.ViewModels.Castegory
+namespace MyLibraryMVC.Application.ViewModels.Category
 {
 	public class CategoryForListVm : IMapFrom<Domain.Model.Category>
 	{

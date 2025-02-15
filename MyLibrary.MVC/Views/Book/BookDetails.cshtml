@@ -92,7 +92,7 @@
 			@Html.DisplayNameFor(model => model.PublishingDate)
 		</dt>
 		<dd class="col-sm-10">
-			@Model.PublishingDate.ToShortDateString()
+			@Model.PublishingDate.Value.ToShortDateString()
 		</dd>
 		<dt class="col-sm-2">
 			@Html.DisplayNameFor(model => model.CityOfPublishing)

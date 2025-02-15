@@ -30,23 +30,35 @@ namespace MyLibraryMVC.Infrastructure.Repositories
 			return loanData.Id;
 		}
 
+		public bool CheckLoan(int bookId, DateTime today)
+		{
+
+			var IsLoan = _context.Loans.Any(l =>
+			l.Book.Id == bookId &&
+			l.LoanDate <= today &&
+			l.ReturnDate >= today
+				);
+			return IsLoan;
+		}
+		public void DeleteLaon(int loanId)
+		{
+			var loan = _context.Loans.Find(loanId);
+			_context.Loans.Remove(loan);
+			_context.SaveChanges();
+		}
+		public int EditLoan(Loan loanData)
+		{
+			_context.Attach(loanData);
+			_context.Entry(loanData).Property(nameof(loanData.LoanDate));
+			_context.Entry(loanData).Property(nameof(loanData.ReturnDate));
+			_context.SaveChanges();
+			return loanData.Id;
+		}
+
 		public IQueryable<Loan> GetAllLoans()
 		{
 			var loans = _context.Loans
-				.Include(l => l.Book)
-				//.Select(l => new LoanBookVm
-				//{
-				//	Id = l.Id,
-				//	BookId = l.BookId,
-				//	IsLoan = l.Book.BookInfo.IsLoan,
-				//	UserId = l.UserID,
-				//	UserName = _userManager.Users
-				//	.Where(u => u.Id == l.UserID)
-				//	.Select(u => u.UserName)
-				//	.FirstOrDefault()
-				//}).ToList()
-				;
-
+				.Include(l => l.Book);
 			return loans;
 		}
 
@@ -60,13 +72,22 @@ namespace MyLibraryMVC.Infrastructure.Repositories
 			return loan;
 		}
 
-		public bool IsAvailable(int bookId, DateTime loandDate, DateTime returnDate)
+		public IQueryable<Loan> GetLoansByBookId(int bookId)
 		{
-			return !_context.Loans.Any(l =>
-			l.Book.Id == bookId &&
-			l.ReturnDate <= loandDate &&
-			l.LoanDate >= returnDate
-				);
+			var loans = _context.Loans
+				.Include(l => l.Book)
+					.ThenInclude(ba => ba.BookAuthors)
+						.ThenInclude(bi => bi.Author)
+				.Where(a => a.BookId == bookId);
+			return loans;
+		}
+
+		public bool IsLoan(int bookId, DateTime loanDate, DateTime returnDate)
+		{
+			var boolValue= !_context.Loans.Any(l =>
+			bookId == l.BookId &&
+			!(loanDate >= l.ReturnDate || returnDate <= l.LoanDate));
+			return boolValue;
 		}
 		//public async Task<List<Loan>> GetAllLoansWithUsernamesA()
 		//{
