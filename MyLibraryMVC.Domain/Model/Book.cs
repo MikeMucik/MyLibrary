@@ -14,7 +14,12 @@ namespace MyLibraryMVC.Domain.Model
 		public int? PublishingInfoId { get; set; }
 		public virtual Info? PublishingInfo { get; set; }		
 		public ICollection<Loan>? Loan { get; set; }
-		public int BookInfoId { get; set; }
+		public int? BookInfoId { get; set; }
 		public required virtual BookInfo BookInfo { get; set; }
+
+		public required int CategoryId { get; set; }
+		public required virtual Category Category { get; set; }
+		public string? Description { get; set; }
+
 	}
 }

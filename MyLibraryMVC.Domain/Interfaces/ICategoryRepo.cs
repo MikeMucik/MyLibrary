@@ -11,6 +11,8 @@ namespace MyLibraryMVC.Domain.Interfaces
 	{
 		void AddCategory(Category category);
 		void DeleteCategory(int id);
+		void EditCategory(Category category);
 		IEnumerable<Category> GetAllCategories();
+		Category GetCategory(int id);
 	}
 }

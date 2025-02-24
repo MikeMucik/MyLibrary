@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MyLibraryMVC.Application.Interfaces;
+using MyLibraryMVC.Application.ViewModels.Author;
 using MyLibraryMVC.Application.ViewModels.Category;
 using MyLibraryMVC.Application.ViewModels.ManagerUser;
 using MyLibraryMVC.Infrastructure;
@@ -10,6 +11,7 @@ using MyLibraryMVC.Infrastructure;
 namespace MyLibraryHome.Controllers
 {
 	[Authorize]
+	[AutoValidateAntiforgeryToken]
 	public class OtherFunctionController : Controller
 	{
 		private readonly ICategoryService _categoryService;
@@ -75,17 +77,47 @@ namespace MyLibraryHome.Controllers
 		{
 			return View();
 		}
+		[HttpGet]		
 		public IActionResult AuthorsInfo(int pageSize = 12, int pageNumber= 1)
 		{
 			var model = _authorService.GetAllAuthors(pageSize, pageNumber );
 			return View(model);
 		}
-		[HttpGet]
+		[HttpGet]		
+		public IActionResult AddAuthor()
+		{
+			return View(new NewAuthorVm());
+		}
+		[HttpPost]		
+		public IActionResult AddAuthor(NewAuthorVm authorVm)
+		{
+			_authorService.GetOrAddAuthor(authorVm);
+			return RedirectToAction("AuthorsInfo");
+		}
+		[HttpGet]		
+		public IActionResult EditAuthor(int id)
+		{
+			var authorVm = _authorService.GetAuthorById(id);
+			return View(authorVm);
+		}
+		[HttpPost]		
+		public IActionResult EditAuthor(NewAuthorVm authorVm)
+		{
+			_authorService.EditAuthor(authorVm);
+			return RedirectToAction("AuthorsInfo");
+		}
+		[HttpGet]		
+		public IActionResult DeleteAuthor(int id)
+		{
+			_authorService.DeleteAuthor(id);
+			return RedirectToAction("AuthorsInfo");
+		}
+		[HttpGet]		
 		public IActionResult AddCategory()
 		{
 			return View(new NewCategoryVm());
 		}
-		[HttpPost]
+		[HttpPost]		
 		public IActionResult AddCategory(NewCategoryVm category)
 		{
 			if (!ModelState.IsValid) 
@@ -95,17 +127,40 @@ namespace MyLibraryHome.Controllers
 			_categoryService.AddCategory(category);
 			return RedirectToAction("ListCategory");
 		}
-		[HttpGet]
-		public IActionResult ListCategory()
+		[HttpGet]		
+		public IActionResult ListCategory(int pageSize, int pageNumber, string sortOrder)
 		{
-			var categories = _categoryService.GetAllCategory();
+			if(pageNumber ==0)
+			{
+				pageNumber = 1;
+				pageSize = 12;
+			}
+			ViewBag.IdSort = sortOrder == "id" ? "id_desc" : "id";
+			ViewBag.CategorySort = sortOrder == "category" ? "category_desc" : "category";
+			var categories = _categoryService.GetAllCategory(pageSize, pageNumber, sortOrder);
 			return View(categories);
 		}
-		[HttpGet]
+		[HttpGet]		
 		public IActionResult DeleteCategory(int id)
 		{
 			_categoryService.DeleteCategory(id);
 			return RedirectToAction("ListCategory");
+		}
+		[HttpGet]		
+		public IActionResult EditCategory(int id) 
+		{
+			var categoryToEdit = _categoryService.GetCategoryById(id);
+			return View(categoryToEdit);
+		}
+		[HttpPost]	
+		public IActionResult EditCategory(NewCategoryVm category)
+		{
+			if (ModelState.IsValid)
+			{
+				_categoryService.EditCategory(category);
+				return RedirectToAction("ListCategory");
+			}
+			return View(category);
 		}
 	}
 }

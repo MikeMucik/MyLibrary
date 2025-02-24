@@ -24,7 +24,9 @@ namespace MyLibraryMVC.Infrastructure.Repositories
 		}
 		public IEnumerable<City> GetAllCity()
 		{
-			return _context.Cities.ToList();
+			return _context.Cities
+				.OrderBy(c => c.Name)
+				.ToList();
 		}
 		public int GetCityIdByName(string cityName)
 		{

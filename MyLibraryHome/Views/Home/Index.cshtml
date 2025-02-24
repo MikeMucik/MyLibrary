@@ -1,4 +1,6 @@
-﻿@{
+﻿@using System.Security.Claims
+
+@{
 	ViewData["Title"] = "Home Page";
 }
 
@@ -6,21 +8,30 @@
 	<h1 class="display-4">Witaj w domowej bibliotece</h1>
 	<p>
 		<a href="@Url.Action("BookIndex","Book")">Wykaz książek</a>
-	</p>
-	<p>
-		<a href="@Url.Action("AddBook","Book")">Dodaj książkę</a>
-	</p>
+	</p>	
 	<p>
 		<a href="@Url.Action("FindBook","Book")">Wyszukaj książkę</a>
-	</p>
-	<p>
-		<a href="@Url.Action("LoanIndex","Loan")">Lista wypożyczeń książek</a>
-	</p>
+	</p>	
 	<p>
 		<a href="@Url.Action("AuthorsInfo","OtherFunction")">Informacje o autorach</a>
 	</p>
+	<p>
+	@if (User.IsInRole("User")||User.IsInRole("Admin"))
+	{
+			<a href="@Url.Action("ShowLoansByUser", "Loan", 
+new { userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value })">
+				Moje wypożyczenia
+			</a>
+	}
+	</p>
 	@if (User.IsInRole("Admin"))
 	{
+		<p>
+			<a href="@Url.Action("AddBook","Book")">Dodaj książkę</a>
+		</p>
+		<p>
+			<a href="@Url.Action("LoanIndex","Loan")">Lista wypożyczeń książek</a>
+		</p>
 		<p>
 			<a href="@Url.Action("AddCategory","OtherFunction")">Dodaj kategorię</a>
 		</p>

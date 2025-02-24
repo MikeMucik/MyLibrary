@@ -33,6 +33,7 @@ namespace MyLibraryMVC.Application.Services
 					Name = cityName
 				};
 				var cityId = _cityRepo.AddCity(city);
+				return cityId;
 			}
 			return checkCity;
 		}

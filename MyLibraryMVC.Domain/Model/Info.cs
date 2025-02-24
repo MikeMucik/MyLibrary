@@ -16,5 +16,6 @@ namespace MyLibraryMVC.Domain.Model
 		public DateOnly? PublishingDate { get; set; }
 		public int? CityOfPublishingId { get; set; }
 		public virtual City? CityOfPublishing { get; set; }
+		//public string ISBN { get; set; }
 	}
 }

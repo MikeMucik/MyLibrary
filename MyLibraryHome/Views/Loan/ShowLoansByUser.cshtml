@@ -1,0 +1,52 @@
+﻿@model MyLibraryMVC.Application.ViewModels.Loan.LoansByUserList
+@using System.Security.Claims
+
+@{
+	ViewData["Title"] = "ShowLoansByUser";
+	var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+}
+
+<h1>Wypożyczenia użytkownika</h1>
+
+<form asp-action="ShowLoansByUser" asp-controller="Loan" method="get" id="userLoan">
+	@Html.AntiForgeryToken()
+	<table class="table">
+		<thead>
+			<tr>
+				<th>
+					<a asp-action="ShowLoansByUser" asp-route-userId="@userId" asp-route-sortOrder="@ViewBag.TitleSortParam">Tytuł</a>
+					@*  @Html.DisplayNameFor(model => model.LoansList.First().BookTitle) *@
+				</th>
+				<th>
+					<a asp-action="ShowLoansByUser" asp-route-userId="@userId" asp-route-sortOrder="@ViewBag.LoanDateSortParam">Data wypożyczenia</a>					
+					@*  @Html.DisplayNameFor(model => model.LoansList.First().LoanDate) *@
+				</th>
+				<th>
+					<a asp-action="ShowLoansByUser" asp-route-userId="@userId" asp-route-sortOrder="@ViewBag.LoanDateSortParam">Data zwrotu</a>					
+					@*  @Html.DisplayNameFor(model => model.LoansList.First().ReturnDate) *@
+				</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in Model.LoansList)
+			{
+				<tr>
+					<td>
+						@Html.DisplayFor(modelItem => item.BookTitle)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.LoanDate)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.ReturnDate)
+					</td>
+					<td>
+						@Html.ActionLink("Przedłużenie wypożyczenia", "LoanEdit", new { loanId = item.Id }) |
+						@Html.ActionLink("Szczegóły wypożyczenia", "LoanDetails", new { loanId = item.Id }) |
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+</form>

@@ -13,7 +13,7 @@ namespace MyLibraryMVC.Domain.Model
 		public required virtual Book Book { get; set; }			
 		public required string UserId { get; set; }		
 		public required string UserName { get; set; }		
-		public DateTime LoanDate { get; set; }
-		public DateTime? ReturnDate { get; set; }
+		public DateOnly LoanDate { get; set; }//
+		public DateOnly? ReturnDate { get; set; }//
 	}	
 }

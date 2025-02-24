@@ -14,5 +14,8 @@ namespace MyLibraryMVC.Application.Interfaces
 		List<SelectListItem> GetAuthorsForSelectList();
 		List<SelectListItem> GetSelectedAuthors(List<NewAuthorVm> bookAuthors);
 		AuthorsListVm GetAllAuthors(int pageSize, int pageNumber);
+		void DeleteAuthor(int id);
+		NewAuthorVm GetAuthorById(int id);
+		void EditAuthor(NewAuthorVm authorVm);
 	}
 }

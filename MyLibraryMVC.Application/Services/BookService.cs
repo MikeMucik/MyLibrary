@@ -54,7 +54,7 @@ namespace MyLibraryMVC.Application.Services
 				.ToList();
 			foreach (var item in booksToShow)// tu musi być funkcja sprawdzająca i ustalająca czy książka jest dostępna
 			{
-				var today = DateTime.Today;
+				var today = DateOnly.FromDateTime(DateTime.Now);
 				item.IsLoan = _loanRepo.CheckLoan(item.Id, today);
 			}
 			var booksList = new ListBooksVm()
@@ -68,16 +68,24 @@ namespace MyLibraryMVC.Application.Services
 			return booksList;
 		}
 		public FindBookVm FindBook(int pageSize, int pageNumber, int authorId,
-			int categoryId, int ageGroupId, int houseOfPublishing)
+			int categoryId, int ageGroupId, int houseOfPublishingId, string searchString)
 		{
-			var books = _bookRepo.GetBooksByDetais(authorId, categoryId, ageGroupId, houseOfPublishing)
-				.OrderBy(x => x.Title)				
+			var books = _bookRepo.GetBooksByDetais(authorId, categoryId, ageGroupId, houseOfPublishingId)
 				.ProjectTo<BookForListVm>(_mapper.ConfigurationProvider)
-				.ToList();
+				.OrderBy(x => x.Title)
+				.Where(x => string.IsNullOrEmpty(searchString) || x.Title.StartsWith(searchString));
+				
+				//.ToList();
+				var totalCount = books.Count();
 			var booksToShow = books
 				.Skip(pageSize * (pageNumber - 1))
 				.Take(pageSize)
 				.ToList();
+			foreach (var item in booksToShow)// tu musi być funkcja sprawdzająca i ustalająca czy książka jest dostępna
+			{
+				var today = DateOnly.FromDateTime(DateTime.Today);
+				item.IsLoan = _loanRepo.CheckLoan(item.Id, today);
+			}
 			var booksList = new FindBookVm()
 			{
 				Books = booksToShow,
@@ -85,8 +93,9 @@ namespace MyLibraryMVC.Application.Services
 				PageSize = pageSize,
 				CategoryId = categoryId,
 				AgeGroupId = ageGroupId,
-				HouseOfPublishingId = houseOfPublishing ,
-				TotalCount = books.Count()
+				HouseOfPublishingId = houseOfPublishingId ,
+				TotalCount = totalCount,
+				SearchString = searchString
 			};
 			return booksList;
 		}
@@ -156,29 +165,37 @@ namespace MyLibraryMVC.Application.Services
 		public NewBookInfoVm GetBookInfoByBookId(int bookId)
 		{
 			var book = _bookRepo.GetBookDetails(bookId);
-			return new NewBookInfoVm
+			if (book.BookInfo != null)
 			{
-				Id = book.BookInfo.Id,
-				NumberOfChapter = book.BookInfo.NumberOfChapter,
-				NumberOfPages = book.BookInfo.NumberOfPages,
-				Illustration = book.BookInfo.Illustration,
-				Binding = book.BookInfo.Binding,
-				Subtitle = book.BookInfo.Subtitle,
-				AgeGroupId = book.BookInfo.AgeGroupId
-			};
+				return new NewBookInfoVm
+				{
+					Id = book.BookInfo.Id,
+					NumberOfChapter = book.BookInfo.NumberOfChapter,
+					NumberOfPages = book.BookInfo.NumberOfPages,
+					Illustration = book.BookInfo.Illustration,
+					Binding = book.BookInfo.Binding,
+					Subtitle = book.BookInfo.Subtitle,
+					AgeGroupId = book.BookInfo.AgeGroupId
+				};
+			}
+			return new NewBookInfoVm();
 		}
 		public NewInfoVm GetInfoByBookId(int bookId)
 		{
 			var info = _bookRepo.GetBookDetails(bookId);
-			return new NewInfoVm
+			if (info.PublishingInfo != null)
 			{
-				Id = info.PublishingInfo.Id,
-				YearOfPublication = info.PublishingInfo.YearOfPublication,
-				PublishingHouseId = info.PublishingInfo.PublishingHouseId,
-				NumberOfPublishing = info.PublishingInfo.NumberOfPublishing,
-				PublishingDate = info.PublishingInfo.PublishingDate,
-				CityOfPublishingId = info.PublishingInfo.CityOfPublishingId
-			};
+				return new NewInfoVm
+				{
+					Id = info.PublishingInfo.Id,
+					YearOfPublication = info.PublishingInfo.YearOfPublication,
+					PublishingHouseId = info.PublishingInfo.PublishingHouseId,
+					NumberOfPublishing = info.PublishingInfo.NumberOfPublishing,
+					PublishingDate = info.PublishingInfo.PublishingDate,
+					CityOfPublishingId = info.PublishingInfo.CityOfPublishingId
+				};
+			}
+			return new NewInfoVm();
 		}
 		public void DeleteBook(int id)
 		{

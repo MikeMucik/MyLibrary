@@ -102,10 +102,12 @@ namespace MyLibraryMVC.Infrastructure.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("ProviderKey")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
@@ -142,10 +144,12 @@ namespace MyLibraryMVC.Infrastructure.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");
@@ -180,10 +184,10 @@ namespace MyLibraryMVC.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateOnly?>("DateOfBirth")
+                    b.Property<DateTime?>("DateOfBirth")
                         .HasColumnType("date");
 
-                    b.Property<DateOnly?>("DateOfDeath")
+                    b.Property<DateTime?>("DateOfDeath")
                         .HasColumnType("date");
 
                     b.Property<string>("Language")
@@ -196,6 +200,9 @@ namespace MyLibraryMVC.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PlaceOfBirth")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PlaceOfDeath")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RealName")
@@ -220,8 +227,14 @@ namespace MyLibraryMVC.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("BookInfoId")
+                    b.Property<int?>("BookInfoId")
                         .HasColumnType("int");
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("PublishingInfoId")
                         .HasColumnType("int");
@@ -233,6 +246,8 @@ namespace MyLibraryMVC.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BookInfoId");
+
+                    b.HasIndex("CategoryId");
 
                     b.HasIndex("PublishingInfoId");
 
@@ -268,12 +283,6 @@ namespace MyLibraryMVC.Infrastructure.Migrations
                     b.Property<string>("Binding")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("Illustration")
                         .HasColumnType("bit");
 
@@ -293,8 +302,6 @@ namespace MyLibraryMVC.Infrastructure.Migrations
 
                     b.HasIndex("AgeGroupId");
 
-                    b.HasIndex("CategoryId");
-
                     b.ToTable("BookInfo");
                 });
 
@@ -307,7 +314,6 @@ namespace MyLibraryMVC.Infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -340,7 +346,6 @@ namespace MyLibraryMVC.Infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -362,7 +367,7 @@ namespace MyLibraryMVC.Infrastructure.Migrations
                     b.Property<int?>("NumberOfPublishing")
                         .HasColumnType("int");
 
-                    b.Property<DateOnly?>("PublishingDate")
+                    b.Property<DateTime?>("PublishingDate")
                         .HasColumnType("date");
 
                     b.Property<int?>("PublishingHouseId")
@@ -392,10 +397,10 @@ namespace MyLibraryMVC.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("LoanDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.Property<DateTime?>("ReturnDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -433,14 +438,14 @@ namespace MyLibraryMVC.Infrastructure.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
@@ -540,7 +545,11 @@ namespace MyLibraryMVC.Infrastructure.Migrations
                 {
                     b.HasOne("MyLibraryMVC.Domain.Model.BookInfo", "BookInfo")
                         .WithMany()
-                        .HasForeignKey("BookInfoId")
+                        .HasForeignKey("BookInfoId");
+
+                    b.HasOne("MyLibraryMVC.Domain.Model.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -549,6 +558,8 @@ namespace MyLibraryMVC.Infrastructure.Migrations
                         .HasForeignKey("PublishingInfoId");
 
                     b.Navigation("BookInfo");
+
+                    b.Navigation("Category");
 
                     b.Navigation("PublishingInfo");
                 });
@@ -578,15 +589,7 @@ namespace MyLibraryMVC.Infrastructure.Migrations
                         .WithMany()
                         .HasForeignKey("AgeGroupId");
 
-                    b.HasOne("MyLibraryMVC.Domain.Model.Category", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("AgeGroup");
-
-                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("MyLibraryMVC.Domain.Model.Info", b =>

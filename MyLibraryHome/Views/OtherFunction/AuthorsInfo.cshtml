@@ -5,10 +5,12 @@
 }
 
 <h1>AuthorsInfo</h1>
-
-<p>
-	<a asp-action="AddAuthor">Dodaj nowego autora</a>
-</p>
+@if (User.IsInRole("Admin"))
+{
+	<p>
+		<a asp-action="AddAuthor">Dodaj nowego autora</a>
+	</p>
+}
 <form asp-action="AuthorsInfo" asp-controller="OtherFunction" , method="get" , id="authorsInfo">
 	<table class="table">
 		<thead>
@@ -38,9 +40,12 @@
 					<td>@Html.DisplayFor(model => item.Language)</td>
 					<td>@Html.DisplayFor(model => item.Nationality)</td>
 					<td>
-						@Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-						@Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-						@Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+						@Html.ActionLink("Książki autora", "FindBook", "Book", new {authorId = item.Id})
+						@if (User.IsInRole("Admin"))
+						{
+						@Html.ActionLink("Edycja", "EditAuthor", new { id = item.Id }) 
+						@Html.ActionLink("Delete", "DeleteAuthor", new { id = item.Id })
+						}
 					</td>
 				</tr>
 			}
@@ -70,6 +75,7 @@
 		</div>
 	</div>
 </form>
+
 @section Scripts
 {
 	<script type="text/javascript">

@@ -1,46 +1,49 @@
 ﻿@model MyLibraryMVC.Application.ViewModels.Loan.ListLoansVm
 
 @{
-    ViewData["Title"] = "BookLoans";
+	ViewData["Title"] = "BookLoans";
 }
 
 <h1>Wypożyczenia książki</h1>
 
 <p>
-    <a asp-action="LoanAdd" asp-route-BookId="@Model.Loans.First().BookId">Dodaj nowe wypożyczenie</a>
+	<a asp-action="LoanAdd" asp-route-BookId="@Model.Loans.First().BookId">Dodaj nowe wypożyczenie</a>
 </p>
-<div>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Tytuł
-                @* @Html.DisplayNameFor(model => model.Loans.First().BookTitle) *@
-            </th>
-            <th>Autorzy
-                @* @Html.DisplayNameFor(model => model.Loans.First().BookAuthor) *@
-            </th>
-            <th>Nazwa użytkownika
-               @*  @Html.DisplayNameFor(model => model.Loans.First().UserName) *@
-            </th>
-            <th>Data wypożyczenia
-             @*    @Html.DisplayNameFor(model => model.Loans.First().LoanDate) *@
-            </th>
-            <th>Data zwrotu
-             @*    @Html.DisplayNameFor(model => model.Loans.First().ReturnDate) *@
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model.Loans) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.BookTitle)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.BookAuthor)
-            </td>
-                @* <td>
+<form asp-action="BookLoans" asp-controller="Loan" method="get" id="bookLoans" >
+	<div>
+		<div>Czy książka jest wypożyczona:@Html.DisplayFor(modelItem => Model.Loans.First().IsLoan)</div>
+		<table class="table">
+			<thead>
+				<tr>
+					<th>
+						Tytuł						
+					</th>
+					<th>
+						Autor
+					</th>
+					<th>
+						<a asp-action="BookLoans" asp-route-bookId="@Model.Loans.First().BookId" asp-route-sortOrder="@ViewBag.UserSortParam">Użytkownik</a>
+					</th>
+					<th>						
+						<a asp-action="BookLoans" asp-route-bookId="@Model.Loans.First().BookId" asp-route-sortOrder="@ViewBag.LoanDateSortParam">Data wypożyczenia</a>
+					</th>
+					<th>
+						<a asp-action="BookLoans" asp-route-bookId="@Model.Loans.First().BookId" asp-route-sortOrder="@ViewBag.LoanReturnSortParam">Data Zwrotu</a>
+					</th>					
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var item in Model.Loans)
+				{
+					<tr>
+						<td>
+							@Html.DisplayFor(modelItem => item.BookTitle)
+						</td>
+						<td>
+							@Html.DisplayFor(modelItem => item.BookAuthor)
+						</td>
+						@* <td>
                     @foreach (var it in item.BookAuthor)
                     {
                         <div style="display: flex; gap: 10px;">
@@ -49,28 +52,29 @@
                         </div>
                     }
                 </td> *@
-           
-            <td>
-                @Html.DisplayFor(modelItem => item.UserName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LoanDate)
-            </td>
-             <td>
-                @Html.DisplayFor(modelItem => item.ReturnDate)
-            </td>
-            <td>
-                @Html.ActionLink("Edycja wypożyczenia", "LoanEdit", new {  loanId=item.Id }) |
-                @Html.ActionLink("Szczegóły wypożyczenia", "LoanDetails", new { loanId=item.Id}) |
-                @Html.ActionLink("Zakończenie wypożycznia", "LoanDelete", new { id=item.Id })
-            </td>
-        </tr>
-}</tbody>
-       
-      
-    
-</table>
 
-	@Html.ActionLink("Idź do listy wypożyczeń", "LoanIndex")|
-	@Html.ActionLink("Wróć do listy książek", "BookIndex", "Book")
-</div>
+						<td>
+							@Html.DisplayFor(modelItem => item.UserName)
+						</td>
+						<td>
+							@Html.DisplayFor(modelItem => item.LoanDate)
+						</td>
+						<td>
+							@Html.DisplayFor(modelItem => item.ReturnDate)
+						</td>						
+						<td>
+							@Html.ActionLink("Edycja wypożyczenia", "LoanEdit", new { loanId = item.Id }) |
+							@Html.ActionLink("Szczegóły wypożyczenia", "LoanDetails", new { loanId = item.Id }) |
+							@Html.ActionLink("Zakończenie wypożycznia", "LoanDelete", new { id = item.Id })
+						</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+		@if (User.IsInRole("Admin"))
+		{
+			@Html.ActionLink("Idź do listy wypożyczeń", "LoanIndex")
+		}|
+		@Html.ActionLink("Wróć do listy książek", "BookIndex", "Book")
+	</div>
+</form>

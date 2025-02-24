@@ -52,10 +52,15 @@ namespace MyLibraryMVC.Application.Services
 		{
 			var authors = _authorRepo.GetAllAuthors();
 			var authorsVms = _mapper.Map<List<AuthorForListVm>>(authors);
-			return authorsVms.Select(c => new SelectListItem
+			return authorsVms
+				.OrderBy(c => c.SurName)
+				.Select(c => new SelectListItem
 			{
 				Value = c.Id.ToString(),
-				Text = c.Name + " " + c.SurName}).ToList();
+				Text = c.Name + " " + c.SurName
+			})
+				
+				.ToList();			
 		}
 		public List<SelectListItem> GetSelectedAuthors(List<NewAuthorVm> bookAuthors)
 		{
@@ -69,11 +74,11 @@ namespace MyLibraryMVC.Application.Services
 			}).ToList();
 			return selectListAuthors;
 		}
-
 		public AuthorsListVm GetAllAuthors(int pageSize, int pageNumber)
 		{
 			var authors = _authorRepo.GetAllAuthors()
 				.Select(x=>_mapper.Map<AuthorForDetailsList>(x))
+				.OrderBy(x=>x.SurName)
 				.ToList();
 			var authorsToShow = authors
 				.Skip(pageSize*(pageNumber-1))
@@ -89,6 +94,21 @@ namespace MyLibraryMVC.Application.Services
 				
 			};
 			return authorList;
+		}
+		public void DeleteAuthor(int id)
+		{
+			_authorRepo.DeleteAuthor(id);
+		}
+		public NewAuthorVm GetAuthorById(int id)
+		{
+			var author = _authorRepo.GetAuthorById(id);
+			var authorVm = _mapper.Map<NewAuthorVm>(author);
+			return authorVm;
+		}
+		public void EditAuthor(NewAuthorVm authorVm)
+		{
+			var author = _mapper.Map<Author>(authorVm);
+			_authorRepo.EditAuthor(author);
 		}
 	}
 }

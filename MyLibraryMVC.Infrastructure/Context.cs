@@ -1,20 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyLibraryMVC.Domain.Model;
 
 namespace MyLibraryMVC.Infrastructure
 {
 	public class Context: IdentityDbContext<ApplicationUser>
 	{
-		public Context(DbContextOptions<Context> options) : base(options)
-		{
-
-		}
+		
 		public DbSet<AgeGroup> AgeGroups { get; set; }
 		public DbSet<Author> Authors { get; set; }
 		public DbSet<Book> Books { get; set; }
@@ -25,8 +24,11 @@ namespace MyLibraryMVC.Infrastructure
 		public DbSet<House> PublishingHouses { get; set; }
 		public DbSet<Info> PublishingInfo { get; set; }
 		public DbSet<Loan> Loans { get; set; }
-		
 
+		public Context(DbContextOptions<Context> options) : base(options)
+		{
+
+		}
 		protected override void OnModelCreating(ModelBuilder builder)
 		{
 			base.OnModelCreating(builder);
@@ -46,10 +48,37 @@ namespace MyLibraryMVC.Infrastructure
 
 			builder.Entity<Author>()
 				.Property(a=>a.DateOfBirth)
+				.HasConversion(new ValueConverter<DateOnly?, DateTime?>(
+					v=>v.HasValue ?v.Value.ToDateTime(TimeOnly.MinValue): null,
+					v=>v.HasValue ?DateOnly.FromDateTime(v.Value):null))
+				.HasColumnType("date");
+
+			builder.Entity<Author>()
+				.Property(a => a.DateOfDeath)
+				.HasConversion(new ValueConverter<DateOnly?, DateTime?>(
+					v => v.HasValue ? v.Value.ToDateTime(TimeOnly.MinValue) : null,
+					v => v.HasValue ? DateOnly.FromDateTime(v.Value) : null))
 				.HasColumnType("date");
 
 			builder.Entity<Info>()
 				.Property(h=>h.PublishingDate)
+				.HasConversion(new ValueConverter<DateOnly?, DateTime?>(
+					v => v.HasValue ? v.Value.ToDateTime(TimeOnly.MinValue) : null,
+					v => v.HasValue ? DateOnly.FromDateTime(v.Value) : null))
+				.HasColumnType("date");
+
+			builder.Entity<Loan>()
+				.Property(a=>a.LoanDate)
+				.HasConversion(new ValueConverter<DateOnly?, DateTime?>(
+					v => v.HasValue ? v.Value.ToDateTime(TimeOnly.MinValue) : null,
+					v => v.HasValue ? DateOnly.FromDateTime(v.Value) : null))
+				.HasColumnType("date");
+
+			builder.Entity<Loan>()
+				.Property(a=>a.ReturnDate)
+				.HasConversion(new ValueConverter<DateOnly?, DateTime?>(
+					v => v.HasValue ? v.Value.ToDateTime(TimeOnly.MinValue) : null,
+					v => v.HasValue ? DateOnly.FromDateTime(v.Value) : null))
 				.HasColumnType("date");
 
 			builder.Entity<Loan>()

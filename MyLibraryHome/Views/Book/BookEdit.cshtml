@@ -11,7 +11,7 @@
 <div class="container">
 
 	<form asp-action="BookEdit">
-
+		@Html.AntiForgeryToken()
 		<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 		<div class="row">
 			<div class="col-md-4">
@@ -227,14 +227,7 @@
 		});
 		$(document).on("click", ".closeDetails-author", function(){
 			$(this).closest(".author-details").remove();
-		});
-		// 	//tu wklej
-		// 	$(document).on("submit", "#bookForm", function () {
-		// 	$("[data-info-field]").each(function () {
-		// 		let fieldName = $(this).attr("data-info-field"); // Pobieramy nazwę pola
-		// 		$("#BookInfo" + fieldName).val($(this).val()); // Kopiujemy wartość do ukrytego pola
-		// 	});
-		// });
+		});		
 	</script>
 	@{
 		await Html.RenderPartialAsync("_ValidationScriptsPartial");

@@ -24,11 +24,10 @@ namespace MyLibraryMVC.Application.ViewModels.Book
 			profile.CreateMap<Domain.Model.Book, BookForListVm>()
 				.ForMember(b=>b.Title, opt => opt.MapFrom(a=>a.Title))
 				.ForMember(b=>b.Authors, opt => opt.MapFrom(a=>a.BookAuthors))
-				.ForMember(b=>b.Category, opt=>opt.MapFrom(a=>a.BookInfo.Category.Name))
-				.ForMember(b=>b.AgeGroup, opt=>opt.MapFrom(a=>a.BookInfo.AgeGroup.Name))
-				//.ForMember(b=>b.IsLoan, opt=>opt.MapFrom(a=>a.BookInfo.IsLoan))
-				.ForMember(b=>b.IsLoan, opt=>opt.Ignore())
-				;
+				.ForMember(b=>b.Category, opt=>opt.MapFrom(a=>a.Category.Name))
+				
+				.ForMember(b=>b.AgeGroup, opt=>opt.MapFrom(a=>a.BookInfo.AgeGroup.Name))			
+				.ForMember(b=>b.IsLoan, opt=>opt.Ignore());
 		}
 	}
 }

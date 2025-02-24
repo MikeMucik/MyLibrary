@@ -11,16 +11,13 @@
 <div class="row">
     <div class="col-md-4">
         <form asp-action="LoanEdit">
+            @Html.AntiForgeryToken()
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                
-                <input asp-for="Id" type="hidden" class="form-control" />
-                
+            <div class="form-group">                
+                <input asp-for="Id" type="hidden" class="form-control" />                
             </div>
-            <div class="form-group">
-                
-                <input asp-for="BookId" type="hidden" class="form-control" />
-               
+            <div class="form-group">                
+                <input asp-for="BookId" type="hidden" class="form-control" />               
             </div>
             <div class="form-group">
                 <label asp-for="BookTitle" class="control-label">Tytuł książki</label>
@@ -32,10 +29,8 @@
                 <input asp-for="BookAuthor" class="form-control" />
                 <span asp-validation-for="BookAuthor" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                
-                <input asp-for="UserId" type="hidden" class="form-control" />
-                
+            <div class="form-group">                
+                <input asp-for="UserId" type="hidden" class="form-control" />                
             </div>
             <div class="form-group">
                 <label asp-for="UserName" class="control-label">Nazwa użytkownika</label>
@@ -62,7 +57,6 @@
 <div>
     @Html.ActionLink("Idź do listy książek", "BookIndex", "Book")|
     @Html.ActionLink("Wróć do listy wypożyczeń książki", "BookLoans", new { BookId = Model.BookId })
-
 </div>
 
 @section Scripts {

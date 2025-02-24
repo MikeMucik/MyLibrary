@@ -5,7 +5,8 @@
 </div>
 <div class="form-group">
 	<label asp-for="YearOfPublication" class="control-label">Rok Publikacji</label>
-	<input asp-for="YearOfPublication" name="NewInfo.YearOfPublication" class="form-control" />
+	<input asp-for="YearOfPublication" type="number" name="NewInfo.YearOfPublication"
+		   min="1800" max="@DateTime.Now.Year" step="1" value="@DateTime.Now.Year" class="form-control" />
 	<span asp-validation-for="YearOfPublication" class="text-danger"></span>
 </div>
 <div class="form-group">
@@ -27,7 +28,7 @@
 </div>
 <div class="form-group">
 	<label asp-for="PublishingDate" class="control-label">Data Publikacji</label>
-	<input asp-for="PublishingDate" name="NewInfo.PublishingDate" class="form-control" />
+	<input asp-for="PublishingDate" type="date" value="@DateTime.Now.Day" name="NewInfo.PublishingDate" class="form-control" />
 	<span asp-validation-for="PublishingDate" class="text-danger"></span>
 </div>
 <div class="form-group">

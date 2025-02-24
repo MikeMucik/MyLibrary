@@ -32,16 +32,50 @@ namespace MyLibraryMVC.Application.Services
 		{
 			_categoryRepo.DeleteCategory(id);
 		}
-		public ListCategoryVm GetAllCategory()
+		public void EditCategory(NewCategoryVm categoryVm)
+		{
+			var category = _mapper.Map<Category>(categoryVm);
+			_categoryRepo.EditCategory(category);
+		}
+		public ListCategoryVm GetAllCategory(int pageSize, int pageNumber, string sortOrder)
 		{
 			var categories = _categoryRepo.GetAllCategories()
-							.Select(x => _mapper.Map<CategoryForListVm>(x))
+							.Select(x => _mapper.Map<CategoryForListVm>(x))							
 							.ToList();
+			switch (sortOrder)
+			{
+				case "id":
+					categories = [.. categories.OrderBy(c => c.Id)];
+					break;
+				case "id_desc":
+					categories = [.. categories.OrderByDescending(c => c.Id)];
+					break;
+				case "category":
+					categories = [.. categories.OrderBy(c=>c.Name)];
+					break;
+				case "category_desc":
+					categories = [.. categories.OrderByDescending(c=>c.Name)];
+					break;
+				default: break;
+			}
+			var categoriesToShow = categories
+				.Skip(pageSize*(pageNumber-1))
+				.Take(pageSize)
+				.ToList();
 			var categoriesList = new ListCategoryVm
 			{
-				Categories = categories,
+				Categories = categoriesToShow,
+				PageCurrent = pageNumber,
+				PageSize = pageSize,
+				TotalCount = categories.Count				
 			};
 			return categoriesList;
+		}
+		public NewCategoryVm GetCategoryById(int id)
+		{
+			var category = _categoryRepo.GetCategory(id);
+			var categoryVm = _mapper.Map<NewCategoryVm>(category);
+			return categoryVm;
 		}
 		public List<SelectListItem> GetCategoryForSelectList()
 		{

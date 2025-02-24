@@ -16,6 +16,7 @@ namespace MyLibraryMVC.Domain.Model
 		public DateOnly? DateOfBirth { get; set; }
 		public DateOnly? DateOfDeath { get; set; }
 		public string? PlaceOfBirth { get; set; }
+		public string? PlaceOfDeath { get; set; }
 		public string? Nationality { get; set; }
 		public string? Language { get; set; }
 		public virtual ICollection<BookAuthor> BookAuthors { get; set; } = new List<BookAuthor>();

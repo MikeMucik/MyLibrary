@@ -13,7 +13,9 @@ namespace MyLibraryMVC.Application.Interfaces
 	{
 		void AddCategory(NewCategoryVm category);		
 		List<SelectListItem> GetCategoryForSelectList();
-		ListCategoryVm GetAllCategory();
+		ListCategoryVm GetAllCategory(int pageSize, int pageNumber, string sortCategory);
 		void DeleteCategory(int id);
+		void EditCategory(NewCategoryVm category);
+		NewCategoryVm GetCategoryById(int id);
 	}
 }

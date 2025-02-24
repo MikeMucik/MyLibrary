@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MyLibraryMVC.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class MyLibraryHome : Migration
+    public partial class MyLibrary : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -43,8 +43,7 @@ namespace MyLibraryMVC.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Discriminator = table.Column<string>(type: "nvarchar(21)", maxLength: 21, nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SurName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -67,12 +66,34 @@ namespace MyLibraryMVC.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Authors",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SurName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RealName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RealSurName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DateOfBirth = table.Column<DateTime>(type: "date", nullable: true),
+                    DateOfDeath = table.Column<DateTime>(type: "date", nullable: true),
+                    PlaceOfBirth = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PlaceOfDeath = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Nationality = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Language = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Authors", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Categories",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -85,7 +106,7 @@ namespace MyLibraryMVC.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -98,11 +119,35 @@ namespace MyLibraryMVC.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_PublishingHouses", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BookInfo",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    NumberOfPages = table.Column<int>(type: "int", nullable: true),
+                    NumberOfChapter = table.Column<int>(type: "int", nullable: true),
+                    Illustration = table.Column<bool>(type: "bit", nullable: false),
+                    Binding = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Subtitle = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AgeGroupId = table.Column<int>(type: "int", nullable: true),
+                    IsLoan = table.Column<bool>(type: "bit", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BookInfo", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BookInfo_AgeGroups_AgeGroupId",
+                        column: x => x.AgeGroupId,
+                        principalTable: "AgeGroups",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -212,48 +257,16 @@ namespace MyLibraryMVC.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "BookInfo",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    NumberOfPages = table.Column<int>(type: "int", nullable: true),
-                    NumberOfChapter = table.Column<int>(type: "int", nullable: true),
-                    Illustration = table.Column<bool>(type: "bit", nullable: true),
-                    Binding = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Subtitle = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CategoryId = table.Column<int>(type: "int", nullable: false),
-                    AgeGroupId = table.Column<int>(type: "int", nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsLoan = table.Column<bool>(type: "bit", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BookInfo", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_BookInfo_AgeGroups_AgeGroupId",
-                        column: x => x.AgeGroupId,
-                        principalTable: "AgeGroups",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_BookInfo_Categories_CategoryId",
-                        column: x => x.CategoryId,
-                        principalTable: "Categories",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "PublishingInfo",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    YearOfPublication = table.Column<int>(type: "int", nullable: false),
-                    PublishingHouseId = table.Column<int>(type: "int", nullable: false),
-                    NumberOfPublishing = table.Column<int>(type: "int", nullable: false),
-                    PublishingDate = table.Column<DateTime>(type: "date", nullable: false),
-                    CityOfPublishingId = table.Column<int>(type: "int", nullable: false)
+                    YearOfPublication = table.Column<int>(type: "int", nullable: true),
+                    PublishingHouseId = table.Column<int>(type: "int", nullable: true),
+                    NumberOfPublishing = table.Column<int>(type: "int", nullable: true),
+                    PublishingDate = table.Column<DateTime>(type: "date", nullable: true),
+                    CityOfPublishingId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -262,14 +275,12 @@ namespace MyLibraryMVC.Infrastructure.Migrations
                         name: "FK_PublishingInfo_Cities_CityOfPublishingId",
                         column: x => x.CityOfPublishingId,
                         principalTable: "Cities",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_PublishingInfo_PublishingHouses_PublishingHouseId",
                         column: x => x.PublishingHouseId,
                         principalTable: "PublishingHouses",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -279,8 +290,10 @@ namespace MyLibraryMVC.Infrastructure.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PublishingInfoId = table.Column<int>(type: "int", nullable: false),
-                    BookInfoId = table.Column<int>(type: "int", nullable: true)
+                    PublishingInfoId = table.Column<int>(type: "int", nullable: true),
+                    BookInfoId = table.Column<int>(type: "int", nullable: true),
+                    CategoryId = table.Column<int>(type: "int", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -291,31 +304,36 @@ namespace MyLibraryMVC.Infrastructure.Migrations
                         principalTable: "BookInfo",
                         principalColumn: "Id");
                     table.ForeignKey(
+                        name: "FK_Books_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_Books_PublishingInfo_PublishingInfoId",
                         column: x => x.PublishingInfoId,
                         principalTable: "PublishingInfo",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
-                name: "Authors",
+                name: "BooksAuthor",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SurName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    RealName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    RealSurName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DateOfBirth = table.Column<DateOnly>(type: "date", nullable: false),
-                    BookId = table.Column<int>(type: "int", nullable: false)
+                    BookId = table.Column<int>(type: "int", nullable: false),
+                    AuthorId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Authors", x => x.Id);
+                    table.PrimaryKey("PK_BooksAuthor", x => new { x.BookId, x.AuthorId });
                     table.ForeignKey(
-                        name: "FK_Authors_Books_BookId",
+                        name: "FK_BooksAuthor_Authors_AuthorId",
+                        column: x => x.AuthorId,
+                        principalTable: "Authors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BooksAuthor_Books_BookId",
                         column: x => x.BookId,
                         principalTable: "Books",
                         principalColumn: "Id",
@@ -329,16 +347,17 @@ namespace MyLibraryMVC.Infrastructure.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     BookId = table.Column<int>(type: "int", nullable: false),
-                    UserID = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    LoanDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ReturnDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LoanDate = table.Column<DateTime>(type: "date", nullable: false),
+                    ReturnDate = table.Column<DateTime>(type: "date", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Loans", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Loans_AspNetUsers_UserID",
-                        column: x => x.UserID,
+                        name: "FK_Loans_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -390,19 +409,9 @@ namespace MyLibraryMVC.Infrastructure.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Authors_BookId",
-                table: "Authors",
-                column: "BookId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_BookInfo_AgeGroupId",
                 table: "BookInfo",
                 column: "AgeGroupId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_BookInfo_CategoryId",
-                table: "BookInfo",
-                column: "CategoryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Books_BookInfoId",
@@ -410,9 +419,19 @@ namespace MyLibraryMVC.Infrastructure.Migrations
                 column: "BookInfoId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Books_CategoryId",
+                table: "Books",
+                column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Books_PublishingInfoId",
                 table: "Books",
                 column: "PublishingInfoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BooksAuthor_AuthorId",
+                table: "BooksAuthor",
+                column: "AuthorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Loans_BookId",
@@ -420,9 +439,9 @@ namespace MyLibraryMVC.Infrastructure.Migrations
                 column: "BookId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Loans_UserID",
+                name: "IX_Loans_UserId",
                 table: "Loans",
-                column: "UserID");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PublishingInfo_CityOfPublishingId",
@@ -454,13 +473,16 @@ namespace MyLibraryMVC.Infrastructure.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Authors");
+                name: "BooksAuthor");
 
             migrationBuilder.DropTable(
                 name: "Loans");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Authors");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
@@ -472,13 +494,13 @@ namespace MyLibraryMVC.Infrastructure.Migrations
                 name: "BookInfo");
 
             migrationBuilder.DropTable(
+                name: "Categories");
+
+            migrationBuilder.DropTable(
                 name: "PublishingInfo");
 
             migrationBuilder.DropTable(
                 name: "AgeGroups");
-
-            migrationBuilder.DropTable(
-                name: "Categories");
 
             migrationBuilder.DropTable(
                 name: "Cities");

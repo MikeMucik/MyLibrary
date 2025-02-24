@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using MyLibraryMVC.Application.Interfaces;
 using MyLibraryMVC.Application.ViewModels.Author;
@@ -10,6 +11,7 @@ using Newtonsoft.Json;
 
 namespace MyLibraryHome.Controllers
 {
+	[AutoValidateAntiforgeryToken]
 	public class BookController : Controller
 	{
 		private readonly IBookService _bookService;
@@ -19,7 +21,6 @@ namespace MyLibraryHome.Controllers
 		private readonly IHouseService _houseService;
 		private readonly ICityService _cityService;
 		private readonly IAuthorService _authorService;
-		//private readonly IBookRepo _bookRepo;
 		public BookController(
 			IBookService bookService,
 			ICategoryService categoryService,
@@ -28,20 +29,18 @@ namespace MyLibraryHome.Controllers
 			IHouseService houseService,
 			ICityService cityService,
 			IAuthorService authorService
-			//,
-			//IBookRepo bookRepo
 			)
 		{
 			_bookService = bookService;
 			_categoryService = categoryService;
 			_ageGroupService = ageGroupService;
-			_bookInfoService = bookInfoService;	
+			_bookInfoService = bookInfoService;
 			_houseService = houseService;
 			_cityService = cityService;
 			_authorService = authorService;
-			//_bookRepo = bookRepo;
 		}
 		[HttpGet]
+
 		public IActionResult BookIndex(int pageSize = 12, int pageNumber = 1, string searchString = "")
 		{
 			var model = _bookService.GetAllBooks(pageSize, pageNumber, searchString);
@@ -50,34 +49,32 @@ namespace MyLibraryHome.Controllers
 		[HttpGet]
 		public IActionResult BookDetails(int id)
 		{
-			
 			var model = _bookService.GetBookDetails(id);
 			return View(model);
-		}		
+		}
 		[HttpGet]
 		public IActionResult FindBook(int pageSize = 12, int pageNumber = 1,
-			int authorId= 0 ,int categoryId = 0, int ageGroupId = 0, int houseOfPublishingId = 0)
+			int authorId = 0, int categoryId = 0, int ageGroupId = 0, int houseOfPublishingId = 0, string searchString = "")
 		{
 			FillViewBags();
 			var model = _bookService.FindBook(pageSize, pageNumber,
-				authorId, categoryId, ageGroupId, houseOfPublishingId);
+				authorId, categoryId, ageGroupId, houseOfPublishingId, searchString);
 			return View(model);
 		}
 		[HttpPost]
 		public IActionResult FindBook(int pageSize, int? pageNumber, int authorId,
-			int categoryId, int ageGroupId,  int houseOfPublishingId)
-			
+			int categoryId, int ageGroupId, int houseOfPublishingId, string searchString)
+
 		{
-			if ( pageNumber == null || pageNumber ==0)
+			if (pageNumber == null || pageNumber == 0)
 			{
 				pageNumber = 1;
-			} ;
-				var model = _bookService.FindBook(pageSize, pageNumber.Value, 
-				authorId ,categoryId, ageGroupId, houseOfPublishingId);
+			};
+			var model = _bookService.FindBook(pageSize, pageNumber.Value,
+			authorId, categoryId, ageGroupId, houseOfPublishingId, searchString);
 			FillViewBags();
 			return View(model);
 		}
-		
 		[HttpGet]
 		public IActionResult AddBook()
 		{
@@ -101,7 +98,7 @@ namespace MyLibraryHome.Controllers
 			FillViewBags();
 			var model = _bookService.GetBookToEdit(id);
 			ViewBag.AuthorsSelect = _authorService.GetSelectedAuthors(model.Authors);
-			
+
 			return View(model);
 		}
 		[HttpPost]
@@ -115,38 +112,48 @@ namespace MyLibraryHome.Controllers
 			}
 			return View(model);
 		}
+		[HttpGet]
 		public IActionResult BookDelete(int id)
 		{
 			_bookService.DeleteBook(id);
 			return RedirectToAction("BookIndex");
 		}
-		[HttpGet]
-		public IActionResult AddBookInfo()
-		{
-			FillViewBags();
-			ViewData.TemplateInfo.HtmlFieldPrefix = "BookInfo";
-			return PartialView("AddBookInfo_model");
-		}
+		//[HttpGet]
+		//public IActionResult AddBookInfo()
+		//{
+		//	FillViewBags();
+		//	ViewData.TemplateInfo.HtmlFieldPrefix = "BookInfo";
+		//	return PartialView("AddBookInfo_model");
+		//}
 		[HttpGet]
 		public IActionResult GetBookInfoPartial(int bookId)
 		{
-			FillViewBags();		
-			var bookInfo = _bookService.GetBookInfoByBookId(bookId); 
-			return PartialView("AddBookInfo_model", bookInfo);
+			FillViewBags();
+			if (bookId != 0)
+			{
+				var bookInfo = _bookService.GetBookInfoByBookId(bookId);
+
+				return PartialView("AddBookInfo_model", bookInfo);
+			}
+			return PartialView("AddBookInfo_model");
 		}
 		[HttpGet]
 		public IActionResult GetInfoPartial(int bookId)
 		{
 			FillViewBags();
-			var info = _bookService.GetInfoByBookId(bookId);
-			return PartialView("AddPublishingInfo_model", info);
+			if (bookId != 0)
+			{
+				var info = _bookService.GetInfoByBookId(bookId);
+				return PartialView("AddPublishingInfo_model", info);
+			}
+			return PartialView("AddPublishingInfo_model");
 		}
-		[HttpGet]
-		public IActionResult AddPublishingInfo()
-		{
-			FillViewBags();
-			return PartialView("_AddInfo");
-		}
+		//[HttpGet]
+		//public IActionResult AddPublishingInfo()
+		//{
+		//	FillViewBags();
+		//	return PartialView("AddPublishingInfo_model");
+		//}
 		public void FillViewBags()
 		{
 			ViewBag.Categories = _categoryService.GetCategoryForSelectList();

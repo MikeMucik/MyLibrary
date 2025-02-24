@@ -11,7 +11,7 @@
 <div class="container">
 
 	<form asp-action="AddBook">
-
+		@Html.AntiForgeryToken()
 		<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 		<div class="row">
 			<div class="col-md-4">
@@ -42,15 +42,12 @@
 								<label for="Authors[@i].SurName" class="control-label">Nazwisko/Pseudonim</label>
 								<input id="Authors[@i].SurName" name="Authors[@i].SurName" class="form-control" />
 								<span data-valmsg-for="Authors[@i].SurName" class="text-danger"></span>
-							</div>
-							
-							<button type="button" class="btn btn-dark addDetails-author" formnovalidate>Dodaj szczegóły o autorze</button>
-						
+							</div>							
+							<button type="button" class="btn btn-dark addDetails-author" formnovalidate>Dodaj szczegóły o autorze</button>						
 						}
 					</div>
 					<button type="button" class="btn btn-secondary" id="addAuthor" formnovalidate>Dodaj autora</button>
 				</div>
-
 				<div class="form-group">
 					<label asp-for="CategoryId" class="control-label">Kategoria</label>
 					<select asp-for="CategoryId" class="form-control" asp-items="ViewBag.Categories"></select>
@@ -104,7 +101,6 @@
 
 				const newField = `<div class="row author-item">
 								<div class="form-group">
-
 									<select id="Authors[${nextIndex}].Id" name="Authors[${nextIndex}].Id" class="form-control">
 									 ${options}
 									</select>
@@ -134,7 +130,6 @@
 			});
 
 			function renumerateAuthors() {
-
 				$(".author-item").each(function (index) {
 					$(this).find("select, input, label, span").each(function () {
 						let oldName = $(this).attr("name");
@@ -162,7 +157,7 @@
 			$("#loadBookInfo").click(function () {
 				const bookInfoPartial = $("#bookInfoPartial");
 				if(bookInfoPartial.is(":empty")){
-				$("#bookInfoPartial").load("@Url.Action("AddBookInfo", "Book")");
+				$("#bookInfoPartial").load("@Url.Action("GetBookInfoPartial", "Book")");
 				} else{
 				bookInfoPartial.empty();
 				}
@@ -171,24 +166,21 @@
 			$("#loadPublicationInfo").click(function () {
 				const publicationInfoPartial = $("#publicationInfoPartial");
 				if(publicationInfoPartial.is(":empty")){
-				$("#publicationInfoPartial").load("@Url.Action("AddPublishingInfo", "Book")");
+				$("#publicationInfoPartial").load("@Url.Action("GetInfoPartial", "Book")");
 				}else {
 					publicationInfoPartial.empty();
 				}
 			});
 
-			$(document).on("click", ".addDetails-author", function(){
-				
+			$(document).on("click", ".addDetails-author", function(){				
 				let authorItem = $(this).closest(".author-item");
 				let number = authorItem.index();
 				console.log({number});
 				let currentIndex = authorItem.index() -1;
 				if (currentIndex === -1){currentIndex = 0}
 				console.log({currentIndex});
-				if (authorItem.find(".author-details").length===0) {
-					
-						let addAuthorDetails = `<div class="author-details"">
-				
+				if (authorItem.find(".author-details").length===0) {					
+						let addAuthorDetails = `<div class="author-details"">				
 					<div class="form-group">
 						<label for="Authors[${currentIndex}].RealName" class="control-label">Prawdziwe Imię</label>
 						<input id="Authors[${currentIndex}].RealName" name="Authors[${currentIndex}].RealName" class="form-control" />
@@ -204,15 +196,13 @@
 						<input type="date" id="Authors[${currentIndex}].DateOfBirth" name="Authors[${currentIndex}].DateOfBirth" class="form-control" />
 						<span data-valmsg-for="Authors[${currentIndex}].DateOfBirth" class="text-danger"></span>
 					</div>
-						<button type="button" class="btn btn-secondary closeDetails-author" formnovalidate>Zamknij</button>
-				
+						<button type="button" class="btn btn-secondary closeDetails-author" formnovalidate>Zamknij</button>				
 			</div>`
 			authorItem.append(addAuthorDetails);			
 			}
 		});
 		$(document).on("click", ".closeDetails-author", function(){
 			$(this).closest(".author-details").remove();
-
 		});
 	</script>
 	@{

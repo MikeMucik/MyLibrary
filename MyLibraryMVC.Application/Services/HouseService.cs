@@ -23,7 +23,6 @@ namespace MyLibraryMVC.Application.Services
 			_houseRepo = houseRepo;
 			_mapper = mapper;
 		}
-
 		public int AddHouse(string houseName)
 		{
 			var checkHouse = _houseRepo.GetHouseIdByName(houseName);
@@ -37,7 +36,6 @@ namespace MyLibraryMVC.Application.Services
 			}
 			return checkHouse;
 		}
-
 		public List<SelectListItem> GetHousesForSelectList()
 		{
 			var houses = _houseRepo.GetAllHouse();

@@ -1,0 +1,78 @@
+﻿@model MyLibraryMVC.Application.ViewModels.Author.NewAuthorVm
+
+@{
+	ViewData["Title"] = "AddAuthor";
+}
+
+<h1>Dodaj autora</h1>
+
+<h4>NewAuthorVm</h4>
+<hr />
+<div class="row">
+	<div class="col-md-4">
+		<form asp-action="AddAuthor">
+			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+			<div class="form-group">
+				<input asp-for="Id" type="hidden" class="form-control" />
+			</div>
+			<div class="form-group">
+				<label asp-for="Name" class="control-label"></label>
+				<input asp-for="Name" class="form-control" />
+				<span asp-validation-for="Name" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="SurName" class="control-label"></label>
+				<input asp-for="SurName" class="form-control" />
+				<span asp-validation-for="SurName" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="RealName" class="control-label"></label>
+				<input asp-for="RealName" class="form-control" />
+				<span asp-validation-for="RealName" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="RealSurName" class="control-label"></label>
+				<input asp-for="RealSurName" class="form-control" />
+				<span asp-validation-for="RealSurName" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="PlaceOfBirth" class="control-label"></label>
+				<input asp-for="PlaceOfBirth" class="form-control" />
+				<span asp-validation-for="PlaceOfBirth" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="DateOfBirth" class="control-label"></label>
+				<input asp-for="DateOfBirth" type="date" class="form-control" />
+				<span asp-validation-for="DateOfBirth" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="DateOfDeath" class="control-label"></label>
+				<input asp-for="DateOfDeath" type="date" class="form-control" />
+				<span asp-validation-for="DateOfDeath" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="Nationality" class="control-label"></label>
+				<input asp-for="Nationality" class="form-control" />
+				<span asp-validation-for="Nationality" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="Language" class="control-label"></label>
+				<input asp-for="Language" class="form-control" />
+				<span asp-validation-for="Language" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<input type="submit" value="Create" class="btn btn-primary" />
+			</div>
+		</form>
+	</div>
+</div>
+
+<div>
+	<a asp-action="AuthorsInfo">Powrót do listy autorów</a>
+</div>
+
+@section Scripts {
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
+}

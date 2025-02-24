@@ -1,26 +1,28 @@
 ﻿@model MyLibraryMVC.Application.ViewModels.Book.FindBookVm
 @{
-    ViewData["Title"] = "FindBook";
+	ViewData["Title"] = "FindBook";
 }
 
-<h1>FindBook</h1>
-
+<h1>Znajdź książkę</h1>
 
 <form asp-action="FindBook" asp-controller="Book" method="post" id="indexFindBooks">
-	
-	 <div class="row-md6">
+	<div class="row-md6">
+		<label for="Model.searchString">Wpisz tytuł</label>
+		<input asp-for="SearchString" />
+	</div>
+	<div class="row-md6">
 		<label for="Model.authorId">Wybierz autora:</label>
 		<select asp-for="AuthorId" asp-items="ViewBag.Authors">
 			<option value="0">Wszystkie</option>
 		</select>
-	</div> 
-	 <div class="row-md6">
+	</div>
+	<div class="row-md6">
 		<label for="categoryId">Wybierz kategorię:</label>
 		<select asp-for="CategoryId" asp-items="ViewBag.Categories">
 			<option value="0">Wszystkie</option>
 		</select>
-	</div> 
-	 <div class="row-md6">
+	</div>
+	<div class="row-md6">
 		<label for="ageGroupId">Wybierz grupę wiekową:</label>
 		<select asp-for="AgeGroupId" asp-items="ViewBag.AgeGroups">
 			<option value="0">Wszystkie</option>
@@ -31,7 +33,7 @@
 		<select asp-for="HouseOfPublishingId" asp-items="ViewBag.Houses">
 			<option value="0">Wszystkie</option>
 		</select>
-	</div> 
+	</div>
 	<input type="submit" value=" Wyszukaj " />
 
 	<div class="row">
@@ -39,19 +41,24 @@
 			<thead>
 				<tr>
 					<th>
-						@Html.DisplayNameFor(model => model.Books.First().Title)
+						Tytuł
+						@* 	@Html.DisplayNameFor(model => model.Books.First().Title) *@
 					</th>
 					<th>
-						@Html.DisplayNameFor(model => model.Books.First().Authors)
+						Autorzy
+						@* 	@Html.DisplayNameFor(model => model.Books.First().Authors) *@
 					</th>
 					<th>
-						@Html.DisplayNameFor(model => model.Books.First().Category)
+						Kategoria
+						@* 	@Html.DisplayNameFor(model => model.Books.First().Category) *@
 					</th>
 					<th>
-						@Html.DisplayNameFor(model => model.Books.First().AgeGroup)
+						Grupa wiekowa
+						@* 	@Html.DisplayNameFor(model => model.Books.First().AgeGroup) *@
 					</th>
 					<th>
-						@Html.DisplayNameFor(model => model.Books.First().IsLoan)
+						Czy jest wypożyczona
+						@* 		@Html.DisplayNameFor(model => model.Books.First().IsLoan) *@
 					</th>
 					<th></th>
 				</tr>
@@ -82,11 +89,23 @@
 							@Html.DisplayFor(modelItem => item.IsLoan)
 						</td>
 						<td>
-							@Html.ActionLink("Edutuj książkę", "BookEdit", new { id = item.Id })
-							@Html.ActionLink("Szczegóły książki", "BookDetails", new { id = item.Id })
-							@Html.ActionLink("Usuń książkę", "BookDelete", new { id = item.Id },
-							new { onclick = "return confirm('Czy na pewno chcesz usunąć tę książkę?');", @class = "btn btn-danger" })
-							@Html.ActionLink("Wypożyczenie", "LoanAdd", "Loan", new { bookId = item.Id })
+							@if (User.IsInRole("Admin"))
+							{
+								@Html.ActionLink("Edytuj książkę", "BookEdit", new { id = item.Id })
+								@Html.ActionLink("Usuń książkę", "BookDelete", new { id = item.Id },
+										new
+										{
+										onclick = "return confirm('Czy na pewno chcesz usunąć tę książkę?');",
+										@class = "btn btn-danger"
+										})
+							}
+							|@Html.ActionLink("Szczegóły książki", "BookDetails", new { id = item.Id })|
+							@if (User.IsInRole("Admin"))
+							{
+								@Html.ActionLink("Lista Wypożyczenia", "BookLoans", "Loan", new { bookId = item.Id })
+							}|
+							@if (User.IsInRole("Admin") || User.IsInRole("User")){
+							@Html.ActionLink("Wypożyczenie", "LoanAdd", "Loan", new { bookId = item.Id })}
 						</td>
 					</tr>
 				}
@@ -122,7 +141,7 @@
 	<script type="text/javascript">
 		function PagerClick(index){
 		document.getElementById("pageNumber").value = index;
-		document.getElementById("indexBooks").submit();
+		document.getElementById("indexFindBooks").submit();
 		}
 	</script>
 }

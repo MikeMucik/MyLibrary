@@ -43,8 +43,7 @@ namespace MyLibraryMVC.Infrastructure.Repositories
 					.ThenInclude(i => i.Author)
 				.Include(b => b.BookInfo)
 					.ThenInclude(i => i.AgeGroup)
-				.Include(b => b.BookInfo)
-					.ThenInclude(i => i.Category)
+				.Include(b => b.Category)					
 				.Include(b => b.PublishingInfo)
 					.ThenInclude(i => i.PublishingHouse)
 				.Include(b => b.PublishingInfo)
@@ -56,13 +55,12 @@ namespace MyLibraryMVC.Infrastructure.Repositories
 		{
 			var books = _context.Books
 		.Include(b => b.BookAuthors)
-		.ThenInclude(ba => ba.Author)
+			.ThenInclude(ba => ba.Author)
+		.Include(b => b.Category)			
 		.Include(b => b.BookInfo)
-		.ThenInclude(bi => bi.Category)
-		.Include(b => b.BookInfo)
-		.ThenInclude(bi => bi.AgeGroup)
+			.ThenInclude(bi => bi.AgeGroup)
 		.Include(b => b.PublishingInfo)
-		.ThenInclude(bi => bi.PublishingHouse)
+			.ThenInclude(bi => bi.PublishingHouse)
 		.AsQueryable();
 			if (authorId > 0)
 			{
@@ -70,7 +68,7 @@ namespace MyLibraryMVC.Infrastructure.Repositories
 			}
 			if (categoryId > 0)
 			{
-				books = books.Where(b => b.BookInfo.CategoryId == categoryId);
+				books = books.Where(b => b.CategoryId == categoryId);
 			}
 			if (ageGroupId > 0)
 			{
@@ -86,7 +84,9 @@ namespace MyLibraryMVC.Infrastructure.Repositories
 		{
 			_context.Attach(book);
 			_context.Entry(book).Property(nameof(book.Title)).IsModified = true;
-			if (book.BookAuthors != null)
+			_context.Entry(book).Property(nameof(book.Description)).IsModified = true;
+			_context.Entry(book).Property(nameof(book.CategoryId)).IsModified = true;
+			if (book.BookInfo != null)
 			{
 				_context.Entry(book.BookInfo).Property(nameof(book.BookInfo.Illustration)).IsModified = true;
 				_context.Entry(book.BookInfo).Property(nameof(book.BookInfo.Subtitle)).IsModified = true;
@@ -95,9 +95,7 @@ namespace MyLibraryMVC.Infrastructure.Repositories
 				_context.Entry(book.BookInfo).Property(nameof(book.BookInfo.AgeGroupId)).IsModified = true;
 				_context.Entry(book.BookInfo).Property(nameof(book.BookInfo.NumberOfPages)).IsModified = true;
 				_context.Entry(book.BookInfo).Property(nameof(book.BookInfo.NumberOfChapter)).IsModified = true;
-			}
-			_context.Entry(book.BookInfo).Property(nameof(book.BookInfo.Description)).IsModified = true;			
-			_context.Entry(book.BookInfo).Property(nameof(book.BookInfo.CategoryId)).IsModified = true;
+			}			
 			if (book.PublishingInfo != null)
 			{
 				_context.Entry(book.PublishingInfo).Property(nameof(book.PublishingInfo.NumberOfPublishing)).IsModified = true;

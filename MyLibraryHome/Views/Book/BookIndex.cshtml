@@ -5,9 +5,13 @@
 }
 
 <h1>Index książek</h1>
-
+@if(User.IsInRole("Admin")){
 <p>
 	<a asp-action="AddBook">Dodaj nową książkę</a>
+</p>
+}
+<p>
+	<a asp-action="FindBook">Zaawansowane wyszukiwanie</a>
 </p>
 <form asp-action="BookIndex" asp-controller="Book" method="get" id="indexBooks">
 	<div class="row-md4">
@@ -67,11 +71,19 @@
 							@Html.DisplayFor(modelItem => item.IsLoan)
 						</td>
 						<td>
-							@Html.ActionLink("Edytuj książkę", "BookEdit", new { id = item.Id })
-							@Html.ActionLink("Szczegóły książki", "BookDetails", new { id = item.Id })
-							@Html.ActionLink("Usuń książkę", "BookDelete", new { id = item.Id }, 
-						  new { onclick = "return confirm('Czy na pewno chcesz usunąć tę książkę?');", @class = "btn btn-danger" })
-							@Html.ActionLink("Wypożyczenie", "BookLoans", "Loan", new { bookId = item.Id })
+							@if(User.IsInRole("Admin")){
+								@Html.ActionLink("Edytuj książkę", "BookEdit", new { id = item.Id })
+								@Html.ActionLink("Usuń książkę", "BookDelete", new { id = item.Id },
+					new { onclick = "return confirm('Czy na pewno chcesz usunąć tę książkę?');", @class = "btn btn-danger" })
+
+							}
+							|@Html.ActionLink("Szczegóły książki", "BookDetails", new { id = item.Id })|
+							@if (User.IsInRole("Admin"))
+							{
+								@Html.ActionLink("Lista Wypożyczenia", "BookLoans", "Loan", new { bookId = item.Id })
+							}|
+							@if(User.IsInRole("Admin")||User.IsInRole("User")){
+							@Html.ActionLink("Wypożyczenie", "LoanAdd", "Loan", new { bookId = item.Id })}
 						</td>
 					</tr>
 				}

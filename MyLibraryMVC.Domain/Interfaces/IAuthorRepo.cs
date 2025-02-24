@@ -12,6 +12,8 @@ namespace MyLibraryMVC.Domain.Interfaces
 		IEnumerable<Author> GetAllAuthors();
 		int AddAuthor (Author author);
 		int GetAuthorIdByName(string? name, string? surName);
-		//Author GetAuthorById (int id);
+		void DeleteAuthor(int id);
+		Author GetAuthorById(int id);
+		void EditAuthor(Author author);
 	}
 }

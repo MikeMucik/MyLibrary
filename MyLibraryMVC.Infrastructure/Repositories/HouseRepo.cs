@@ -29,7 +29,9 @@ namespace MyLibraryMVC.Infrastructure.Repositories
 		}
 		public IEnumerable<House> GetAllHouse()
 		{
-			return _context.PublishingHouses.ToList();
+			return _context.PublishingHouses
+				.OrderBy(h => h.Name)
+				.ToList();
 		}
 	}
 }

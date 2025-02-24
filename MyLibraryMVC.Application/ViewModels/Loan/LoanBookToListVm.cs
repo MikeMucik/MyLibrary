@@ -17,8 +17,8 @@ namespace MyLibraryMVC.Application.ViewModels.Loan
 		public bool IsLoan { get; set; }
 		public string UserId { get; set; }
 		public string UserName { get; set; }
-		public DateTime LoanDate { get; set; }
-		public DateTime ReturnDate { get; set; }
+		public DateOnly LoanDate { get; set; }
+		public DateOnly ReturnDate { get; set; }
 
 		public void Mapping(Profile profile)
 		{
